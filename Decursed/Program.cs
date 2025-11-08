@@ -1,11 +1,13 @@
-﻿namespace Decursed
+﻿namespace Decursed;
+
+/// <summary>
+/// The entry point of the application.
+/// </summary>
+internal static class Program
 {
-	internal class Program
+	public static void Main(string[] _)
 	{
-		static void Main(string[] _)
-		{
-			using var game = new Game();
-			game.Run();
-		}
+		using var game = new Game();
+		game.Run();
 	}
 }
