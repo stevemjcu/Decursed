@@ -22,7 +22,11 @@ internal class Game : App
 		Texture = new(GraphicsDevice, new(128, 128, Color.Blue));
 	}
 
-	protected override void Startup() { }
+	protected override void Startup()
+	{
+		// TODO:
+		// Load and pack textures
+	}
 
 	protected override void Shutdown() { }
 
