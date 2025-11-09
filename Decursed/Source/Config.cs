@@ -1,6 +1,6 @@
 ﻿using Foster.Framework;
 
-namespace Decursed;
+namespace Decursed.Source;
 
 /// <summary>
 /// Contains global configuration options.
@@ -9,5 +9,7 @@ internal static class Config
 {
 	public static string Title = "Decursed";
 	public static Point2 NativeResolution = new(128, 128);
-	public static Point2 DisplayResolution = NativeResolution * 3;
+	public static int ScreenScale = 3;
+
+	public static Point2 DisplayResolution => NativeResolution * ScreenScale;
 }

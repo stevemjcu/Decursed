@@ -1,10 +1,10 @@
 ﻿using Foster.Framework;
 using System.Numerics;
 
-namespace Decursed;
+namespace Decursed.Source;
 
 /// <summary>
-/// The core game loop.
+/// Manages the game loop.
 /// </summary>
 internal class Game : App
 {

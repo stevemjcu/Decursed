@@ -1,4 +1,4 @@
-﻿namespace Decursed;
+﻿namespace Decursed.Source;
 
 /// <summary>
 /// The entry point of the application.
