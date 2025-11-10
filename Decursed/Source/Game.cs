@@ -12,10 +12,7 @@ internal class Game : App
 {
 	private readonly Batcher Batcher;
 	private readonly Target Buffer;
-	private readonly TextureSampler Sampler = new(TextureFilter.Nearest, TextureWrap.Clamp);
-
-	private Texture Atlas;
-	private Dictionary<string, Subtexture> Subtextures;
+	private readonly Dictionary<string, Subtexture> Subtextures;
 
 	private readonly Camera Camera;
 	private readonly Level Level;
@@ -29,9 +26,7 @@ internal class Game : App
 	{
 		Batcher = new(GraphicsDevice);
 		Buffer = new(GraphicsDevice, Config.NativeResolution.X, Config.NativeResolution.Y);
-
 		Subtextures = PackTextures(GraphicsDevice, Config.TexturePath);
-		Atlas = Subtextures.First().Value.Texture!;
 
 		Camera = new Camera()
 		{
@@ -48,15 +43,31 @@ internal class Game : App
 
 		foreach (var it in Directory.EnumerateFiles(path))
 		{
-			packer.Add
-			(
-				Path.GetFileNameWithoutExtension(it),
-				new Aseprite(it).RenderFrame(0)
-			);
+			var name = Path.GetFileNameWithoutExtension(it);
+			var file = new Aseprite(it);
+			var frames = file.RenderAllFrames();
+			var size = frames[0].Size / Config.TileSize;
+
+			for (var i = 0; i < size.X; i++)
+			{
+				for (var j = 0; j < size.Y; j++)
+				{
+					var clip = new RectInt
+					(
+						new Point2(i, j) * Config.TileSize,
+						Config.TileSize
+					);
+
+					for (var k = 0; k < frames.Length; k++)
+					{
+						packer.Add(string.Join('/', [name, i, j, k]), frames[k], clip);
+					}
+				}
+			}
 		}
 
 		var output = packer.Pack();
-		var texture = new Texture(device, output.Pages[0]);
+		var texture = new Texture(device, output.Pages.Single());
 		var subtextures = new Dictionary<string, Subtexture>();
 
 		foreach (var it in output.Entries)
@@ -73,7 +84,7 @@ internal class Game : App
 
 	protected override void Update()
 	{
-		//Scene.Update();
+		Level.Update();
 	}
 
 	protected override void Render()
@@ -81,17 +92,20 @@ internal class Game : App
 		Buffer.Clear(Color.Black);
 		Window.Clear(Color.Black);
 
-		//Scene.Render();
+		Level.Render();
 
-		var position = Camera.WindowToNative((Point2)Input.Mouse.Position);
-		Batcher.Circle(new(position, 2), 16, Color.White);
+		var mousePosition = Camera.WindowToNative((Point2)Input.Mouse.Position);
+		var subtexture = Subtextures["Player/0/0/0"];
+		Batcher.Image(subtexture, mousePosition, Color.White);
 
 		// Render to buffer
 		Batcher.Render(Buffer);
 		Batcher.Clear();
 
-		Batcher.PushSampler(Sampler);
-		Batcher.Image(Buffer, Vector2.Zero, Vector2.Zero, new(Config.Scale), 0, Color.White);
+		Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
+		Batcher.PushMatrix(Vector2.Zero, new(Config.Scale), 0);
+		Batcher.Image(Buffer, Color.White);
+		Batcher.PopMatrix();
 		Batcher.PopSampler();
 
 		// Render to window

@@ -7,6 +7,8 @@ namespace Decursed.Source;
 /// </summary>
 internal static class Config
 {
+	private enum Page { Player, Props, Tiles };
+
 	public static string Title = "Decursed";
 
 	public static string ContentPath = @".\Content";
@@ -14,7 +16,8 @@ internal static class Config
 	public static string TexturePath = Path.Combine(ContentPath, "Texture");
 
 	public static Point2 NativeResolution = new(128, 128);
-	public static int Scale = 4;
+	public static Point2 TileSize = new(8, 8);
+	public static int Scale = 5;
 
 	public static Point2 WindowResolution => NativeResolution * Scale;
 }
