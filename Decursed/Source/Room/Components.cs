@@ -4,23 +4,29 @@ using System.Numerics;
 
 namespace Decursed.Source.Room;
 
-// Can be rendered.
-public record struct Sprite(Subtexture Texture);
+internal static class Components
+{
+	// Can be rendered.
+	public record struct Sprite(Subtexture Texture);
 
-// Can be moved.
-public record struct Body(Vector2 Position, Vector2 Velocity, bool HasGravity);
+	// Can be moved.
+	public record struct Body(Vector2 Position, Vector2 Velocity);
 
-// Can collide.
-public record struct Collide(Rect Bounds);
+	// Can fall.
+	public record struct Gravity(bool Enabled);
 
-// Can receive input.
-public record struct Input();
+	// Can collide.
+	public record struct Collider(Rect Bounds);
 
-// Can be held and thrown.
-public record struct Item();
+	// Can receive input.
+	public record struct Receiver();
 
-// Can hold and throw an item.
-public record struct Hold(Entity Item);
+	// Can be held and thrown.
+	public record struct Item();
 
-// Can be interacted with.
-public record struct Interact(Action Callback);
+	// Can hold and throw an item.
+	public record struct Storage(Entity Item);
+
+	// Can be entered to activate.
+	public record struct Entrance(Action Callback);
+}

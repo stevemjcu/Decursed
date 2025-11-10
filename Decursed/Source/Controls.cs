@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Decursed.Source;
 
-namespace Decursed.Source
+/// <summary>
+/// Abstracts control scheme.
+/// </summary>
+internal class Controls
 {
-	internal class Controls
-	{
-	}
 }

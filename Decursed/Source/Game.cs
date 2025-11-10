@@ -1,4 +1,6 @@
-﻿using Foster.Framework;
+﻿using Decursed.Source.General;
+using Decursed.Source.Room;
+using Foster.Framework;
 using System.Numerics;
 
 namespace Decursed.Source;
@@ -8,48 +10,92 @@ namespace Decursed.Source;
 /// </summary>
 internal class Game : App
 {
-	private readonly Batcher Batch;
-	private readonly Texture Texture;
+	private readonly Batcher Batcher;
+	private readonly Target Buffer;
+	private readonly TextureSampler Sampler = new(TextureFilter.Nearest, TextureWrap.Clamp);
+
+	private Texture Atlas;
+	private Dictionary<string, Subtexture> Subtextures;
+
+	private readonly Camera Camera;
+	private readonly Level Level;
 
 	public Game() : base
 	(
 		Config.Title,
-		Config.DisplayResolution.X,
-		Config.DisplayResolution.Y
+		Config.WindowResolution.X,
+		Config.WindowResolution.Y
 	)
 	{
-		Batch = new(GraphicsDevice);
-		Texture = new(GraphicsDevice, new(128, 128, Color.Blue));
+		Batcher = new(GraphicsDevice);
+		Buffer = new(GraphicsDevice, Config.NativeResolution.X, Config.NativeResolution.Y);
+
+		Subtextures = PackTextures(GraphicsDevice, Config.TexturePath);
+		Atlas = Subtextures.First().Value.Texture!;
+
+		Camera = new Camera()
+		{
+			NativeResolution = Config.NativeResolution,
+			WindowResolution = Config.WindowResolution
+		};
+
+		Level = new Level(Path.Combine(Config.LevelPath, "00"));
 	}
 
-	protected override void Startup()
+	private static Dictionary<string, Subtexture> PackTextures(GraphicsDevice device, string path)
 	{
-		// TODO:
-		// Load and pack textures
+		var packer = new Packer();
+
+		foreach (var it in Directory.EnumerateFiles(path))
+		{
+			packer.Add
+			(
+				Path.GetFileNameWithoutExtension(it),
+				new Aseprite(it).RenderFrame(0)
+			);
+		}
+
+		var output = packer.Pack();
+		var texture = new Texture(device, output.Pages[0]);
+		var subtextures = new Dictionary<string, Subtexture>();
+
+		foreach (var it in output.Entries)
+		{
+			subtextures.Add(it.Name, new(texture, it.Source, it.Frame));
+		}
+
+		return subtextures;
 	}
+
+	protected override void Startup() { }
 
 	protected override void Shutdown() { }
 
-	protected override void Update() { }
+	protected override void Update()
+	{
+		//Scene.Update();
+	}
 
 	protected override void Render()
 	{
+		Buffer.Clear(Color.Black);
 		Window.Clear(Color.Black);
 
-		Batch.PushMatrix
-		(
-			new Vector2(Window.WidthInPixels, Window.HeightInPixels) / 2,
-			new Vector2(Texture.Width, Texture.Height) / 2,
-			Vector2.One,
-			(float)Time.Elapsed.TotalSeconds * 4.0f
-		);
+		//Scene.Render();
 
-		Batch.Image(Texture, Vector2.Zero, Color.White);
-		Batch.PopMatrix();
+		var position = Camera.WindowToNative((Point2)Input.Mouse.Position);
+		Batcher.Circle(new(position, 2), 16, Color.White);
 
-		Batch.Circle(new(Input.Mouse.Position, 8), 16, Color.White);
+		// Render to buffer
+		Batcher.Render(Buffer);
+		Batcher.Clear();
 
-		Batch.Render(Window);
-		Batch.Clear();
+		Batcher.PushSampler(Sampler);
+		Batcher.Image(Buffer, Vector2.Zero, Vector2.Zero, new(Config.Scale), 0, Color.White);
+		Batcher.PopSampler();
+
+		// Render to window
+		Batcher.Render(Window);
+		Batcher.Clear();
 	}
 }

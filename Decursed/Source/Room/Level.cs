@@ -1,20 +1,21 @@
 ﻿using Arch.Core;
+using Decursed.Source.General;
 
 namespace Decursed.Source.Room;
 
 /// <summary>
 /// Manages game logic and meta state.
 /// </summary>
-internal class Scene
+internal class Level : IScene
 {
 	private readonly Dictionary<Entity, int> Globals; // entity : template id
-	private readonly Dictionary<int, Template> Templates; // template id : template
+	private readonly List<Template> Templates; // template id : template
 	private readonly Stack<Instance> Instances; // call stack
 
-	public Scene(string folderPath)
+	public Level(string folderPath)
 	{
-		// Load templates/globals
-		// Instantiate first template
+		// TODO: Load templates/globals
+		// TODO: Instantiate first template
 	}
 
 	public void Update() { }
