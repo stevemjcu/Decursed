@@ -7,7 +7,7 @@ namespace Decursed.Source;
 /// </summary>
 internal static class Config
 {
-	private enum Page { Player, Props, Tiles };
+	public enum Page { Player, Props, Tiles };
 
 	public static string Title = "Decursed";
 
