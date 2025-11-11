@@ -1,6 +1,6 @@
 ﻿using Arch.Core;
 
-namespace Decursed.Source.Room;
+namespace Decursed.Source.Level;
 
 /// <summary>
 /// An instance of a room.

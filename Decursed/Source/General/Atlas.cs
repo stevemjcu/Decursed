@@ -1,6 +1,6 @@
 ﻿using Foster.Framework;
 
-namespace Decursed.Source;
+namespace Decursed.Source.General;
 
 internal class Atlas
 {
@@ -17,15 +17,16 @@ internal class Atlas
 		{
 			for (var j = 0; j < size.Y; j++)
 			{
+				var position = new Point2(i, j);
 				var clip = new RectInt
 				(
-					new Point2(i, j) * Config.TileSize,
+					position * Config.TileSize,
 					Config.TileSize
 				);
 
 				for (var k = 0; k < frames.Length; k++)
 				{
-					Packer.Add(string.Join('/', [name, i, j, k]), frames[k], clip);
+					Packer.Add(CreateIndex(name, position, k), frames[k], clip);
 				}
 			}
 		}
@@ -42,6 +43,9 @@ internal class Atlas
 		}
 	}
 
-	public Subtexture Get(string page, Point2 position, int frame = 0) =>
-		Subtextures[string.Join('/', [page, position.X, position.Y, frame])];
+	public Subtexture Get(string name, Point2 position, int frame = 0) =>
+		Subtextures[CreateIndex(name, position, frame)];
+
+	private static string CreateIndex(string name, Point2 position, int frame) =>
+		string.Join('/', [name, position.X, position.Y, frame]);
 }

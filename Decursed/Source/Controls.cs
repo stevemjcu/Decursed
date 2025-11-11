@@ -1,7 +1,7 @@
 ﻿namespace Decursed.Source;
 
 /// <summary>
-/// Abstracts control scheme.
+/// Manages the control scheme.
 /// </summary>
 internal class Controls
 {

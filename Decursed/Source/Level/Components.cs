@@ -2,7 +2,7 @@
 using Foster.Framework;
 using System.Numerics;
 
-namespace Decursed.Source.Room;
+namespace Decursed.Source.Level;
 
 internal static class Components
 {
@@ -25,7 +25,7 @@ internal static class Components
 	public record struct Item();
 
 	// Can hold and throw an item.
-	public record struct Storage(Entity Item);
+	public record struct Hold(Entity Item);
 
 	// Can be entered to activate.
 	public record struct Entrance(Action Callback);

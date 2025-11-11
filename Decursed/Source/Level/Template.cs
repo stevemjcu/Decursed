@@ -1,4 +1,4 @@
-﻿namespace Decursed.Source.Room;
+﻿namespace Decursed.Source.Level;
 
 /// <summary>
 /// A template of a room.

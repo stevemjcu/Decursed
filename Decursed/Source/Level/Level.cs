@@ -1,7 +1,7 @@
 ﻿using Arch.Core;
 using Decursed.Source.General;
 
-namespace Decursed.Source.Room;
+namespace Decursed.Source.Level;
 
 /// <summary>
 /// Manages game logic and meta state.
