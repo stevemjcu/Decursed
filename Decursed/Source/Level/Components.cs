@@ -29,4 +29,13 @@ internal static class Components
 
 	// Can be entered to activate.
 	public record struct Entrance(Action Callback);
+
+	// Belongs to an instance.
+	public record struct Local(int Id);
+
+	// Belongs to a template.
+	public record struct Global(int Id);
+
+	// Belongs to current instance.
+	public record struct Active();
 }
