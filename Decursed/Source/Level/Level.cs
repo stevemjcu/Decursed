@@ -1,6 +1,5 @@
 ﻿using Decursed.Source.General;
 using Flecs.NET.Core;
-using Foster.Framework;
 
 namespace Decursed.Source.Level;
 
@@ -11,7 +10,9 @@ internal class Level : IScene, IDisposable
 {
 	private readonly World World = World.Create();
 	private readonly Factory Factory;
+
 	private readonly Entity Player;
+	private readonly Stack<Entity> CallStack = [];
 
 	public Level(string path)
 	{
@@ -21,11 +22,11 @@ internal class Level : IScene, IDisposable
 		foreach (var it in Directory.EnumerateFiles(path))
 		{
 			var id = int.Parse(Path.GetFileNameWithoutExtension(it));
-			var layout = Utility.ParseCsv(it, (Point2)Config.LevelSize);
+			var layout = Utility.ParseCsv(it, Config.LevelSize);
 			Factory.CreateTemplate(id, layout);
 		}
 
-		// TODO: Instantiate root template as room parented to player
+		Enter(Factory.CreateRoom(0));
 	}
 
 	public void Dispose() => World.Dispose();
@@ -35,5 +36,11 @@ internal class Level : IScene, IDisposable
 	public void Render()
 	{
 		// TODO: Render room parented to player
+	}
+
+	private void Enter(Entity room)
+	{
+		Player.ChildOf(room);
+		CallStack.Push(room);
 	}
 }

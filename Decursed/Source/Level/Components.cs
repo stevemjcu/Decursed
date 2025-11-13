@@ -2,6 +2,13 @@
 
 namespace Decursed.Source.Level;
 
+internal static class Archetypes
+{
+	public record struct Template();
+
+	public record struct Instance();
+}
+
 internal static class Components
 {
 	#region Render

@@ -33,7 +33,8 @@ internal class Factory
 		return entity;
 	}
 
+	// Create prefab hierarchy
 	public Entity CreateTemplate(int id, string[,] layout) => default;
 
-	public Entity CreateRoom(Entity template) => default;
+	public Entity CreateRoom(int id) => default;
 }

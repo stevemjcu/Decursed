@@ -23,5 +23,5 @@ internal static class Config
 	public static Point2 WindowResolution = NativeResolution * Scale;
 
 	public static Vector2 UnitSize = new(1, 1);
-	public static Vector2 LevelSize = NativeResolution / TileSize;
+	public static Point2 LevelSize = NativeResolution / TileSize;
 }
