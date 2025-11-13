@@ -55,7 +55,7 @@ internal class Game : App
 		Level.Render();
 
 		var position = Camera.WindowToNative((Point2)Input.Mouse.Position);
-		var subtexture = Atlas.Get(Config.Page.Player.ToString(), new(0, 0), 0);
+		var subtexture = Atlas.Get(Spritesheet.Player.ToString(), new(0, 0));
 		Batcher.Image(subtexture, position, Color.White);
 
 		// Render to buffer

@@ -1,41 +1,48 @@
-﻿using Arch.Core;
-using Foster.Framework;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace Decursed.Source.Level;
 
 internal static class Components
 {
-	// Can be rendered.
-	public record struct Sprite(Subtexture Texture);
+	#region Render
 
-	// Can be moved.
-	public record struct Body(Vector2 Position, Vector2 Velocity);
+	// Can be rendered as a sprite.
+	public record struct Sprite(Enum Type);
+
+	// Can be rendered as a grid of sprites.
+	public record struct Tilemap(Enum[,] Grid);
+
+	#endregion
+
+	#region Update
+
+	// Exists in the world.
+	public record struct Position(Vector2 Vector);
+
+	// Can move.
+	public record struct Velocity(Vector2 Vector);
 
 	// Can fall.
-	public record struct Gravity(bool Enabled);
+	public record struct Gravity();
 
 	// Can collide.
-	public record struct Collider(Rect Bounds);
+	public record struct Bounds(Vector2 Vector);
 
 	// Can receive input.
 	public record struct Receiver();
 
 	// Can be held and thrown.
-	public record struct Item();
+	public record struct Portable();
 
-	// Can hold and throw an item.
-	public record struct Hold(Entity Item);
+	#endregion
 
-	// Can be entered to activate.
-	public record struct Entrance(Action Callback);
+	#region Relationship
 
-	// Belongs to an instance.
-	public record struct Local(int Id);
+	// Can be used to enter a room.
+	public record struct Enters();
 
-	// Belongs to a template.
-	public record struct Global(int Id);
+	// Can be used to exit a room.
+	public record struct Exits();
 
-	// Belongs to current instance.
-	public record struct Active();
+	#endregion
 }
