@@ -11,7 +11,7 @@ internal class Atlas
 	{
 		var name = Path.GetFileNameWithoutExtension(path);
 		var frames = new Aseprite(path).RenderAllFrames();
-		var size = frames[0].Size / Config.TileSize;
+		var size = frames[0].Size / Config.TileResolution;
 
 		for (var i = 0; i < size.X; i++)
 		{
@@ -20,8 +20,8 @@ internal class Atlas
 				var position = new Point2(i, j);
 				var clip = new RectInt
 				(
-					position * Config.TileSize,
-					Config.TileSize
+					position * Config.TileResolution,
+					Config.TileResolution
 				);
 
 				for (var k = 0; k < frames.Length; k++)

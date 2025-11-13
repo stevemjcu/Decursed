@@ -10,9 +10,7 @@ internal class Level : IScene, IDisposable
 {
 	private readonly World World = World.Create();
 	private readonly Factory Factory;
-
 	private readonly Entity Player;
-	private readonly Stack<Entity> CallStack = [];
 
 	public Level(string path)
 	{
@@ -41,6 +39,7 @@ internal class Level : IScene, IDisposable
 	private void Enter(Entity room)
 	{
 		Player.ChildOf(room);
-		CallStack.Push(room);
+		// Rifts must be assigned to previous room
+		// If no previous room, delete them
 	}
 }

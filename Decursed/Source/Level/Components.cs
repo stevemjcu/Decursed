@@ -2,13 +2,6 @@
 
 namespace Decursed.Source.Level;
 
-internal static class Archetypes
-{
-	public record struct Template();
-
-	public record struct Instance();
-}
-
 internal static class Components
 {
 	#region Render
@@ -43,7 +36,7 @@ internal static class Components
 
 	#endregion
 
-	#region Relationship
+	#region Relation
 
 	// Can be used to enter a room.
 	public record struct Enters();

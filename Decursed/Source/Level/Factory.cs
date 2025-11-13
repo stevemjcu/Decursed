@@ -13,7 +13,7 @@ internal class Factory
 		World = world;
 		Actor = World.Prefab()
 			.Add<Sprite>()
-			.Add<Bounds>().Set<Bounds>(new(Config.UnitSize))
+			.Set<Bounds>(new(Config.UnitSize))
 			.Add<Position>()
 			.Add<Velocity>()
 			.Add<Gravity>();

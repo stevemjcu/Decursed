@@ -63,7 +63,7 @@ internal class Game : App
 		Batcher.Clear();
 
 		Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
-		Batcher.PushMatrix(Vector2.Zero, new(Config.Scale), 0);
+		Batcher.PushMatrix(Vector2.Zero, new(Config.WindowScale), 0);
 		Batcher.Image(Buffer, Color.White);
 		Batcher.PopMatrix();
 		Batcher.PopSampler();
