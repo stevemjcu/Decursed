@@ -2,9 +2,9 @@
 using Foster.Framework;
 using System.Globalization;
 
-namespace Decursed.Source.General;
+namespace Decursed.Library.Source;
 
-internal class Utility
+public class Utility
 {
 	public static string[,] ParseCsv(string path, Point2 size)
 	{

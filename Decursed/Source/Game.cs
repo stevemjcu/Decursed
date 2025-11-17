@@ -1,4 +1,6 @@
-﻿using Decursed.Source.General;
+﻿using Decursed.Library.Source;
+using Decursed.Source.Data;
+using Decursed.Source.Scenes;
 using Foster.Framework;
 using System.Numerics;
 
@@ -14,7 +16,7 @@ internal class Game : App
 	private readonly Atlas Atlas = new();
 
 	private readonly Camera Camera;
-	private readonly Level.Level Level;
+	private readonly Level Level;
 
 	public Game() : base
 	(
@@ -26,7 +28,7 @@ internal class Game : App
 		Batcher = new(GraphicsDevice);
 		Buffer = new(GraphicsDevice, Config.NativeResolution.X, Config.NativeResolution.Y);
 
-		foreach (var it in Directory.EnumerateFiles(Config.TexturePath)) Atlas.Add(it);
+		foreach (var it in Directory.EnumerateFiles(Config.TexturesPath)) Atlas.Add(it, Config.TileResolution);
 		Atlas.Pack(GraphicsDevice);
 
 		Camera = new Camera()
@@ -35,7 +37,7 @@ internal class Game : App
 			WindowResolution = Config.WindowResolution
 		};
 
-		Level = new Level.Level(Path.Combine(Config.LevelPath, "00"));
+		Level = new Level(Path.Combine(Config.LevelsPath, "00"));
 	}
 
 	protected override void Startup() { }
