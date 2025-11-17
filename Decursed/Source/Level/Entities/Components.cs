@@ -1,20 +1,10 @@
 ﻿using System.Numerics;
 
-namespace Decursed.Source.Level;
+namespace Decursed.Source.Level.Entities;
 
 internal static class Components
 {
-	#region Render
-
-	// Can be rendered as a sprite.
-	public record struct Sprite(Enum Type);
-
-	// Can be rendered as a grid of sprites.
-	public record struct Tilemap(Enum[,] Grid);
-
-	#endregion
-
-	#region Update
+	#region Actor
 
 	// Exists in the world.
 	public record struct Position(Vector2 Vector);
@@ -33,6 +23,13 @@ internal static class Components
 
 	// Can be held and thrown.
 	public record struct Portable();
+
+	#endregion
+
+	#region Room
+
+	// Has a physical layout.
+	public record struct Layout(int[,] Grid);
 
 	#endregion
 

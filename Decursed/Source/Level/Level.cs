@@ -1,4 +1,5 @@
 ﻿using Decursed.Source.General;
+using Decursed.Source.Level.Entities;
 using Flecs.NET.Core;
 
 namespace Decursed.Source.Level;
@@ -10,21 +11,14 @@ internal class Level : IScene, IDisposable
 {
 	private readonly World World = World.Create();
 	private readonly Factory Factory;
-	private readonly Entity Player;
 
 	public Level(string path)
 	{
 		Factory = new(World);
-		Player = Factory.CreateActor(Archetype.Player);
 
-		foreach (var it in Directory.EnumerateFiles(path))
-		{
-			var id = int.Parse(Path.GetFileNameWithoutExtension(it));
-			var layout = Utility.ParseCsv(it, Config.LevelSize);
-			Factory.CreateTemplate(id, layout);
-		}
+		foreach (var it in Directory.EnumerateFiles(path)) Factory.RegisterTemplate(it);
 
-		Enter(Factory.CreateRoom(0));
+		World.Entity().IsA(Factory.Player);
 	}
 
 	public void Dispose() => World.Dispose();
@@ -34,12 +28,5 @@ internal class Level : IScene, IDisposable
 	public void Render()
 	{
 		// TODO: Render room parented to player
-	}
-
-	private void Enter(Entity room)
-	{
-		Player.ChildOf(room);
-		// Rifts must be assigned to previous room
-		// If no previous room, delete them
 	}
 }

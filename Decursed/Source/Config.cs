@@ -3,8 +3,6 @@ using System.Numerics;
 
 namespace Decursed.Source;
 
-internal enum Archetype { Player, Chest };
-
 internal enum Spritesheet { Player, Props, Tiles };
 
 /// <summary>
