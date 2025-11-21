@@ -2,11 +2,11 @@
 using Foster.Framework;
 using System.Globalization;
 
-namespace Decursed.Library.Source;
+namespace Decursed.Source.Utility;
 
-public class Utility
+public static class Parser
 {
-	public static string[,] ParseCsv(string path, Point2 size)
+	public static string[,] ReadCsv(string path, Point2 size)
 	{
 		var grid = new string[size.X, size.Y];
 
