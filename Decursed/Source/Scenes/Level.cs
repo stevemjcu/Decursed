@@ -1,4 +1,4 @@
-﻿using Decursed.Source.Utility;
+﻿using Decursed.Library.Source;
 using Decursed.Source.Data;
 using Decursed.Source.Objects;
 
@@ -17,7 +17,7 @@ internal class Level : IScene
 		foreach (var it in Directory.EnumerateFiles(path))
 		{
 			var id = int.Parse(Path.GetFileNameWithoutExtension(it));
-			var content = Parser.ReadCsv(it, Config.LevelSize);
+			var content = Utility.ParseCsv(it, Config.LevelSize);
 
 			Templates[id] = new Template(content);
 		}

@@ -9,7 +9,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CsvHelper" Version="33.1.0" />
 		<PackageReference Include="FosterFramework" Version="0.2.2" />
 	</ItemGroup>
 
@@ -17,6 +16,10 @@
 		<Content Include="Content/**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Decursed.Library\Decursed.Library.csproj" />
 	</ItemGroup>
 
 </Project>

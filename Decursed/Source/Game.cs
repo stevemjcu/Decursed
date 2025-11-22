@@ -1,4 +1,4 @@
-﻿using Decursed.Source.Utility;
+﻿using Decursed.Library.Source;
 using Decursed.Source.Data;
 using Decursed.Source.Scenes;
 using Foster.Framework;
