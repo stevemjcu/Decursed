@@ -1,8 +1,8 @@
-﻿using Decursed.Source.General;
+﻿using Decursed;
 using Foster.Framework;
 using System.Numerics;
 
-namespace Decursed.Source;
+namespace Decursed;
 
 /// <summary>
 /// Manages the game loop.
@@ -14,7 +14,7 @@ internal class Game : App
 	private readonly Atlas Atlas = new();
 
 	private readonly Camera Camera;
-	private readonly Level.Level Level;
+	private readonly Level Level;
 
 	public Game() : base
 	(
@@ -35,7 +35,7 @@ internal class Game : App
 			WindowResolution = Config.WindowResolution
 		};
 
-		Level = new Level.Level(Path.Combine(Config.LevelPath, "00"));
+		Level = new Level(Path.Combine(Config.LevelPath, "00"));
 	}
 
 	protected override void Startup() { }

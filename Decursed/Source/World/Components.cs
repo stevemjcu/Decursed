@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Decursed.Source.Level.Entities;
+namespace Decursed;
 
 internal static class Components
 {

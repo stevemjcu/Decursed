@@ -1,24 +1,25 @@
-﻿using Decursed.Source.General;
-using Decursed.Source.Level.Entities;
-using Flecs.NET.Core;
+﻿using MoonTools.ECS;
 
-namespace Decursed.Source.Level;
+namespace Decursed;
 
 /// <summary>
 /// Manages the call stack and topmost room.
 /// </summary>
 internal class Level : IScene, IDisposable
 {
-	private readonly World World = World.Create();
+	private readonly World World = new();
 	private readonly Factory Factory;
 
 	public Level(string path)
 	{
 		Factory = new(World);
 
-		foreach (var it in Directory.EnumerateFiles(path)) Factory.RegisterTemplate(it);
+		foreach (var it in Directory.EnumerateFiles(path))
+		{
+			Factory.CreateTemplate(it);
+		}
 
-		World.Entity().IsA(Factory.Player);
+		World.CreateEntity();
 	}
 
 	public void Dispose() => World.Dispose();

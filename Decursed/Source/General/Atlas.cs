@@ -1,6 +1,6 @@
 ﻿using Foster.Framework;
 
-namespace Decursed.Source.General;
+namespace Decursed;
 
 internal class Atlas
 {

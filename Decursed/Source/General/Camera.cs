@@ -1,7 +1,7 @@
 ﻿using Foster.Framework;
 using System.Numerics;
 
-namespace Decursed.Source.General;
+namespace Decursed;
 
 /// <summary>
 /// Converts between game and screen coordinates.

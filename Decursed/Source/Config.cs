@@ -1,7 +1,7 @@
 ﻿using Foster.Framework;
 using System.Numerics;
 
-namespace Decursed.Source;
+namespace Decursed;
 
 internal enum Spritesheet { Player, Props, Tiles };
 

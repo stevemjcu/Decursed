@@ -2,7 +2,7 @@
 using Foster.Framework;
 using System.Globalization;
 
-namespace Decursed.Source.General;
+namespace Decursed;
 
 internal class Utility
 {
