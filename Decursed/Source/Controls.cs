@@ -1,4 +1,4 @@
-﻿namespace Decursed.Source.Data;
+﻿namespace Decursed.Source;
 
 /// <summary>
 /// Manages the control scheme.

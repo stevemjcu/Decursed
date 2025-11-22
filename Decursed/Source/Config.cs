@@ -1,7 +1,7 @@
 ﻿using Foster.Framework;
 using System.Numerics;
 
-namespace Decursed.Source.Data;
+namespace Decursed.Source;
 
 internal enum Spritesheet { Player, Props, Tiles };
 
@@ -13,8 +13,8 @@ internal static class Config
 	public static string Title = "Decursed";
 
 	public static string ContentPath = @".\Content";
-	public static string LevelsPath = Path.Combine(ContentPath, "Levels");
-	public static string TexturesPath = Path.Combine(ContentPath, "Textures");
+	public static string LevelPath = Path.Combine(ContentPath, "Level");
+	public static string TexturePath = Path.Combine(ContentPath, "Texture");
 
 	public static int TargetFps = 60;
 	public static int WindowScale = 5;

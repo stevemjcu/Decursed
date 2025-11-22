@@ -1,4 +1,4 @@
-﻿namespace Decursed.Source.Scenes;
+﻿namespace Decursed.Source.General;
 
 internal interface IScene
 {

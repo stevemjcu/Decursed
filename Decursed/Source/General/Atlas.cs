@@ -1,17 +1,17 @@
 ﻿using Foster.Framework;
 
-namespace Decursed.Library.Source;
+namespace Decursed.Source.General;
 
-public class Atlas
+internal class Atlas
 {
 	private readonly Packer Packer = new();
 	private readonly Dictionary<string, Subtexture> Subtextures = [];
 
-	public void Add(string path, Point2 resolution)
+	public void Add(string path)
 	{
 		var name = Path.GetFileNameWithoutExtension(path);
 		var frames = new Aseprite(path).RenderAllFrames();
-		var size = frames[0].Size / resolution;
+		var size = frames[0].Size / Config.TileResolution;
 
 		for (var i = 0; i < size.X; i++)
 		{
@@ -20,8 +20,8 @@ public class Atlas
 				var position = new Point2(i, j);
 				var clip = new RectInt
 				(
-					position * resolution,
-					resolution
+					position * Config.TileResolution,
+					Config.TileResolution
 				);
 
 				for (var k = 0; k < frames.Length; k++)

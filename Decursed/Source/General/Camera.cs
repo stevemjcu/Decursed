@@ -1,12 +1,12 @@
 ﻿using Foster.Framework;
 using System.Numerics;
 
-namespace Decursed.Library.Source;
+namespace Decursed.Source.General;
 
 /// <summary>
 /// Converts between game and screen coordinates.
 /// </summary>
-public class Camera
+internal class Camera
 {
 	// World
 	public Vector2 Position;
