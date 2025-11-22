@@ -1,0 +1,3 @@
+[submodule "MoonTools.ECS"]
+	path = MoonTools.ECS
+	url = https://github.com/MoonsideGames/MoonTools.ECS
