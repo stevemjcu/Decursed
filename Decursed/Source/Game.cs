@@ -1,5 +1,4 @@
-﻿using Decursed;
-using Foster.Framework;
+﻿using Foster.Framework;
 using System.Numerics;
 
 namespace Decursed;

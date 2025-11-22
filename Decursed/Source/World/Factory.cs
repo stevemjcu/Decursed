@@ -8,7 +8,7 @@ internal class Factory(World world) : IDisposable
 	private readonly World World = world;
 	private readonly Dictionary<int, Entity> Templates = [];
 
-    public void Dispose() => World.Dispose();
+	public void Dispose() => World.Dispose();
 
 	public void CreateTemplate(string path)
 	{
