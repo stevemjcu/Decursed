@@ -6,17 +6,23 @@ internal static class Components
 {
 	#region Capabilities
 
+	// Can be drawn.
+	public record struct Sprite(int Id);
+
+	// Can be animated.
+	public record struct Animation(int Tag, int Frame);
+
 	// Can be positioned.
 	public record struct Position(Vector2 Vector);
 
 	// Can move.
 	public record struct Velocity(Vector2 Vector);
 
-	// Can collide.
-	public record struct Bounds(Vector2 Vector);
-
 	// Can fall.
 	public record struct Gravity();
+
+	// Can collide.
+	public record struct Bounds(Vector2 Vector);
 
 	// Can receive input.
 	public record struct Receiver();
@@ -27,7 +33,7 @@ internal static class Components
 	// Can be stood on.
 	public record struct Platform();
 
-	// Can unlock things.
+	// Can unlock doors.
 	public record struct Unlock();
 
 	// Can end the level.
@@ -37,10 +43,10 @@ internal static class Components
 
 	#region Relations
 
-	// Is an entrance to a room.
+	// Is an entrance to a template.
 	public record struct EntersTo();
 
-	// Is an exit to a room.
+	// Is an exit to an entrance.
 	public record struct ExitsTo();
 
 	// Is an instance of a template.

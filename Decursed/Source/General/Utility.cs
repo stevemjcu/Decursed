@@ -6,6 +6,7 @@ namespace Decursed;
 
 internal class Utility
 {
+	// Indexed by column (x) then row (y)
 	public static string[,] ParseCsv(string path, Point2 size)
 	{
 		var grid = new string[size.X, size.Y];

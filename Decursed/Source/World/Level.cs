@@ -7,19 +7,16 @@ namespace Decursed;
 /// </summary>
 internal class Level : IScene, IDisposable
 {
-	private readonly World World = new();
+	private readonly World World;
 	private readonly Factory Factory;
 
 	public Level(string path)
 	{
+		World = new();
 		Factory = new(World);
 
-		foreach (var it in Directory.EnumerateFiles(path))
-		{
-			Factory.CreateTemplate(it);
-		}
-
-		World.CreateEntity();
+		foreach (var it in Directory.EnumerateFiles(path)) Factory.CreateTemplate(it);
+		Factory.CreateRootInstance();
 	}
 
 	public void Dispose() => World.Dispose();
