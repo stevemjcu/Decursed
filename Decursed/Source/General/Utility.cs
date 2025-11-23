@@ -16,6 +16,7 @@ internal class Utility
 		for (var y = 0; y < size.Y; y++)
 		{
 			parser.Read();
+
 			for (var x = 0; x < size.X; x++)
 			{
 				grid[x, y] = parser.Record![x];

@@ -1,4 +1,5 @@
 ﻿using MoonTools.ECS;
+using System.Numerics;
 using static Decursed.Components;
 
 namespace Decursed;
@@ -6,48 +7,96 @@ namespace Decursed;
 internal class Factory(World world) : IDisposable
 {
 	private readonly World World = world;
+
+	// ID to template to layout
 	private readonly Dictionary<int, Entity> Templates = [];
+	private readonly Dictionary<Entity, string[,]> Layouts = [];
 
 	public void Dispose() => World.Dispose();
 
-	public void CreateTemplate(string path)
+	public Entity CreateTemplate(string path)
 	{
 		var id = int.Parse(Path.GetFileNameWithoutExtension(path));
-		var content = Utility.ParseCsv(path, Config.LevelSize);
+		var layout = Utility.ParseCsv(path, Config.LevelSize);
+		var template = World.CreateEntity(id.ToString());
 
-		var layout = new int[Config.LevelSize.X, Config.LevelSize.Y];
-		var template = World.CreateEntity();
-
-		World.Set<Layout>(template, new(layout));
-
-		for (var x = 0; x < Config.LevelSize.X; x++)
-		{
-			for (var y = 0; y < Config.LevelSize.Y; y++)
-			{
-				var value = content[x, y];
-
-				if (value == string.Empty) continue;
-				if (value[0] == 'w') { layout[x, y] = 1; continue; }
-
-				var entity = value[0] switch
-				{
-					'r' => World.Entity().IsA(Rift),
-					'c' => World.Entity().IsA(Chest),
-					'b' => World.Entity().IsA(Box),
-					_ => default
-				};
-
-				entity.ChildOf(template);
-			}
-		}
-
-		Templates[id] = template;
+		(Templates[id], Layouts[template]) = (template, layout);
 		return template;
 	}
 
-	public Entity CreateRoom(int id) => default;
+	public Entity CreateInstance(Entity template, Entity current)
+	{
+		var instance = World.CreateEntity();
+		var layout = Layouts[template];
 
-	public Entity CreatePlayer() => default;
+		for (var x = 0; x < layout.GetLength(0); x++)
+		{
+			for (var y = 0; y < layout.GetLength(1); y++)
+			{
+				var position = new Vector2(x, y);
+				var value = layout[x, y];
 
-	public Entity CreateChest() => default;
+				// TODO: Handle capitals as globals
+				if (value[0] == '-' || value[0] == 'w') continue;
+
+				var entity = value[0] switch
+				{
+					'r' => CreateRift(position, current),
+					'c' => CreateChest(position, Templates[value[1]]),
+					'b' => CreateBox(position),
+					'k' => CreateKey(position),
+					_ => throw new Exception($"Invalid entity: {value[0]}"),
+				};
+
+				World.Relate<ChildOf>(entity, instance, new());
+			}
+		}
+
+		return instance;
+	}
+
+	private Entity CreateActor(Vector2 position)
+	{
+		var entity = World.CreateEntity();
+		World.Set<Bounds>(entity, new(Config.UnitSize));
+		World.Set<Position>(entity, new(position));
+		World.Set<Velocity>(entity, new(Vector2.Zero));
+		World.Set<Gravity>(entity, new());
+		return entity;
+	}
+
+	public Entity CreatePlayer(Vector2 position)
+	{
+		var entity = CreateActor(position);
+		World.Set<Receiver>(entity, new());
+		return entity;
+	}
+
+	public Entity CreateChest(Vector2 position, Entity template)
+	{
+		var entity = CreateActor(position);
+		World.Relate<EntersTo>(entity, template, new());
+		return entity;
+	}
+
+	public Entity CreateRift(Vector2 position, Entity instance)
+	{
+		var entity = CreateActor(position);
+		World.Relate<ExitsTo>(entity, instance, new());
+		return entity;
+	}
+
+	public Entity CreateBox(Vector2 position)
+	{
+		var entity = CreateActor(position);
+		World.Set<Platform>(entity, new());
+		return entity;
+	}
+
+	public Entity CreateKey(Vector2 position)
+	{
+		var entity = CreateActor(position);
+		World.Set<Unlock>(entity, new());
+		return entity;
+	}
 }

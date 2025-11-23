@@ -4,19 +4,19 @@ namespace Decursed;
 
 internal static class Components
 {
-	#region Actor
+	#region Capabilities
 
-	// Exists in the world.
+	// Can be positioned.
 	public record struct Position(Vector2 Vector);
 
 	// Can move.
 	public record struct Velocity(Vector2 Vector);
 
-	// Can fall.
-	public record struct Gravity();
-
 	// Can collide.
 	public record struct Bounds(Vector2 Vector);
+
+	// Can fall.
+	public record struct Gravity();
 
 	// Can receive input.
 	public record struct Receiver();
@@ -24,22 +24,30 @@ internal static class Components
 	// Can be held and thrown.
 	public record struct Portable();
 
+	// Can be stood on.
+	public record struct Platform();
+
+	// Can unlock things.
+	public record struct Unlock();
+
+	// Can end the level.
+	public record struct Goal();
+
 	#endregion
 
-	#region Room
+	#region Relations
 
-	// Has a physical layout.
-	public record struct Layout(int[,] Grid);
+	// Is an entrance to a room.
+	public record struct EntersTo();
 
-	#endregion
+	// Is an exit to a room.
+	public record struct ExitsTo();
 
-	#region Relation
+	// Is an instance of a template.
+	public record struct InstanceOf();
 
-	// Can be used to enter a room.
-	public record struct Enters();
-
-	// Can be used to exit a room.
-	public record struct Exits();
+	// Is a child of an entity.
+	public record struct ChildOf();
 
 	#endregion
 }
