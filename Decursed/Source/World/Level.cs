@@ -10,21 +10,23 @@ internal class Level : IScene, IDisposable
 	private readonly World World;
 	private readonly Factory Factory;
 
-	public Level(string path)
+	// Systems
+	private readonly Draw Draw;
+
+	public Level(string path, Game game)
 	{
 		World = new();
 		Factory = new(World);
 
 		foreach (var it in Directory.EnumerateFiles(path)) Factory.CreateTemplate(it);
 		Factory.CreateRootInstance();
+
+		Draw = new(World, game.Graphics, Factory.Layouts);
 	}
 
 	public void Dispose() => World.Dispose();
 
 	public void Update() { }
 
-	public void Render()
-	{
-		// TODO: Render room parented to player
-	}
+	public void Render() => Draw.Render();
 }

@@ -30,11 +30,10 @@ internal class Game : App
 			Atlas = atlas
 		};
 
-		Window.SetMouseVisible(false);
 		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00"), this));
 	}
 
-	protected override void Startup() { }
+	protected override void Startup() => Window.SetMouseVisible(false);
 
 	protected override void Shutdown() { }
 
@@ -46,12 +45,7 @@ internal class Game : App
 		Graphics.Buffer.Clear(Color.Black);
 
 		Scenes.Peek().Render();
-
-		// Draw cursor
-		Window.SetMouseVisible(false);
-		var position = Graphics.Camera.WindowToNative((Point2)Input.Mouse.Position);
-		var subtexture = Graphics.Atlas.Get(Spritesheet.Sprites, new(2, 1));
-		Graphics.Batcher.Image(subtexture, position, Color.White);
+		DrawCursor();
 
 		// Render to buffer
 		Graphics.Batcher.Render(Graphics.Buffer);
@@ -66,5 +60,12 @@ internal class Game : App
 		// Render to window
 		Graphics.Batcher.Render(Window);
 		Graphics.Batcher.Clear();
+	}
+
+	private void DrawCursor()
+	{
+		var position = Graphics.Camera.WindowToNative((Point2)Input.Mouse.Position);
+		var subtexture = Graphics.Atlas.Get(Spritesheet.Sprites, new(2, 1));
+		Graphics.Batcher.Image(subtexture, position, Color.White);
 	}
 }

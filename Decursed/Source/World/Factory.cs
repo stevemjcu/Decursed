@@ -9,8 +9,8 @@ internal class Factory(World world) : IDisposable
 	private readonly World World = world;
 
 	// Maps tag to template to layout
-	private readonly Dictionary<char, Entity> Templates = [];
-	private readonly Dictionary<Entity, string[,]> Layouts = [];
+	public readonly Dictionary<char, Entity> Templates = [];
+	public readonly Dictionary<Entity, string[,]> Layouts = [];
 
 	public void Dispose() => World.Dispose();
 
@@ -24,16 +24,13 @@ internal class Factory(World world) : IDisposable
 		return template;
 	}
 
-	public Entity CreateRootInstance() =>
-		CreateInstanceInternal(Templates['0'], null);
+	public Entity CreateRootInstance() => CreateInstance(Templates['0'], null);
 
-	public Entity CreateInstance(Entity template, Entity current) =>
-		CreateInstanceInternal(template, current);
-
-	private Entity CreateInstanceInternal(Entity template, Entity? entrance)
+	public Entity CreateInstance(Entity template, Entity? entrance)
 	{
-		var instance = World.CreateEntity();
 		var layout = Layouts[template];
+		var instance = World.CreateEntity();
+		World.Relate<InstanceOf>(instance, template, new());
 
 		for (var x = 0; x < layout.GetLength(0); x++)
 		{
