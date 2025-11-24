@@ -46,6 +46,9 @@ internal class Atlas
 	public Subtexture Get(string name, Point2 position, int frame = 0) =>
 		Subtextures[CreateIndex(name, position, frame)];
 
+	public Subtexture Get(IFormattable name, Point2 position, int frame = 0) =>
+	Subtextures[CreateIndex(name.ToString()!, position, frame)];
+
 	private static string CreateIndex(string name, Point2 position, int frame) =>
 		string.Join('/', [name, position.X, position.Y, frame]);
 }

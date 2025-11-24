@@ -8,12 +8,8 @@ namespace Decursed;
 /// </summary>
 internal class Game : App
 {
-	private readonly Batcher Batcher;
-	private readonly Target Buffer;
-	private readonly Atlas Atlas = new();
-
-	private readonly Camera Camera;
-	private readonly Level Level;
+	public readonly Graphics Graphics;
+	public readonly Stack<IScene> Scenes = new();
 
 	public Game() : base
 	(
@@ -22,53 +18,53 @@ internal class Game : App
 		Config.WindowResolution.Y
 	)
 	{
-		Batcher = new(GraphicsDevice);
-		Buffer = new(GraphicsDevice, Config.NativeResolution.X, Config.NativeResolution.Y);
+		var atlas = new Atlas();
+		foreach (var it in Directory.EnumerateFiles(Config.TexturePath)) atlas.Add(it);
+		atlas.Pack(GraphicsDevice);
 
-		foreach (var it in Directory.EnumerateFiles(Config.TexturePath)) Atlas.Add(it);
-		Atlas.Pack(GraphicsDevice);
-
-		Camera = new Camera()
+		Graphics = new()
 		{
-			NativeResolution = Config.NativeResolution,
-			WindowResolution = Config.WindowResolution
+			Batcher = new(GraphicsDevice),
+			Buffer = new(GraphicsDevice, Config.NativeResolution.X, Config.NativeResolution.Y),
+			Camera = new(Config.NativeResolution, Config.WindowResolution),
+			Atlas = atlas
 		};
 
-		Level = new Level(Path.Combine(Config.LevelPath, "00"));
+		Window.SetMouseVisible(false);
+		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00"), this));
 	}
 
 	protected override void Startup() { }
 
 	protected override void Shutdown() { }
 
-	protected override void Update()
-	{
-		Level.Update();
-	}
+	protected override void Update() => Scenes.Peek().Update();
 
 	protected override void Render()
 	{
 		Window.Clear(Color.Black);
-		Buffer.Clear(Color.Black);
+		Graphics.Buffer.Clear(Color.Black);
 
-		Level.Render();
+		Scenes.Peek().Render();
 
-		var position = Camera.WindowToNative((Point2)Input.Mouse.Position);
-		var subtexture = Atlas.Get(Spritesheet.Player.ToString(), new(0, 0));
-		Batcher.Image(subtexture, position, Color.White);
+		// Draw cursor
+		Window.SetMouseVisible(false);
+		var position = Graphics.Camera.WindowToNative((Point2)Input.Mouse.Position);
+		var subtexture = Graphics.Atlas.Get(Spritesheet.Sprites, new(2, 1));
+		Graphics.Batcher.Image(subtexture, position, Color.White);
 
 		// Render to buffer
-		Batcher.Render(Buffer);
-		Batcher.Clear();
+		Graphics.Batcher.Render(Graphics.Buffer);
+		Graphics.Batcher.Clear();
 
-		Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
-		Batcher.PushMatrix(Vector2.Zero, new(Config.WindowScale), 0);
-		Batcher.Image(Buffer, Color.White);
-		Batcher.PopMatrix();
-		Batcher.PopSampler();
+		Graphics.Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
+		Graphics.Batcher.PushMatrix(Vector2.Zero, new(Config.WindowScale), 0);
+		Graphics.Batcher.Image(Graphics.Buffer, Color.White);
+		Graphics.Batcher.PopMatrix();
+		Graphics.Batcher.PopSampler();
 
 		// Render to window
-		Batcher.Render(Window);
-		Batcher.Clear();
+		Graphics.Batcher.Render(Window);
+		Graphics.Batcher.Clear();
 	}
 }

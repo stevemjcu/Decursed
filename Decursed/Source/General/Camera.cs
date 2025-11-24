@@ -6,15 +6,15 @@ namespace Decursed;
 /// <summary>
 /// Converts between game and screen coordinates.
 /// </summary>
-internal class Camera
+internal class Camera(Point2 nativeResolution, Point2 windowResolution)
 {
 	// World
 	public Vector2 Position;
 	public Vector2 Size;
 
 	// Screen
-	public Point2 NativeResolution;
-	public Point2 WindowResolution;
+	public Point2 NativeResolution = nativeResolution;
+	public Point2 WindowResolution = windowResolution;
 
 	public Point2 WindowToNative(Point2 position) =>
 		(Point2)((Vector2)position / WindowResolution * NativeResolution);

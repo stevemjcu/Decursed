@@ -3,7 +3,7 @@ using System.Numerics;
 
 namespace Decursed;
 
-internal enum Spritesheet { Player, Props, Tiles };
+internal enum Spritesheet { Player, Sprites, Tiles };
 
 /// <summary>
 /// Contains global configuration options.
