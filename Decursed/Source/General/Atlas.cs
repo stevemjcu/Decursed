@@ -2,6 +2,9 @@
 
 namespace Decursed;
 
+/// <summary>
+/// Packs spritesheets into one texture.
+/// </summary>
 internal class Atlas(GraphicsDevice device)
 {
 	private readonly GraphicsDevice Device = device;

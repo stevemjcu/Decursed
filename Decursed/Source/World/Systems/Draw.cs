@@ -4,6 +4,9 @@ using static Decursed.Components;
 
 namespace Decursed;
 
+/// <summary>
+/// Renders the current room.
+/// </summary>
 internal class Draw(World world, Factory factory) : System(world)
 {
 	private readonly Factory Factory = factory;

@@ -2,6 +2,9 @@
 
 namespace Decursed;
 
+/// <summary>
+/// Contains all components which can belong to an entity.
+/// </summary>
 internal static class Components
 {
 	#region Capabilities

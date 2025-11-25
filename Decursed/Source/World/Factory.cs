@@ -4,6 +4,9 @@ using static Decursed.Components;
 
 namespace Decursed;
 
+/// <summary>
+/// Used to create entities.
+/// </summary>
 internal class Factory(World world) : IDisposable
 {
 	private readonly World World = world;
