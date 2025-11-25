@@ -7,12 +7,17 @@ namespace Decursed;
 internal class Draw
 (
 	World world,
-	Graphics graphics,
+	Batcher batcher,
+	Camera camera,
+	Atlas atlas,
 	Dictionary<Entity, string[,]> layouts
 )
 	: Renderer(world)
 {
-	public Graphics Graphics = graphics;
+	private readonly Batcher Batcher = batcher;
+	private readonly Camera Camera = camera;
+	private readonly Atlas Atlas = atlas;
+
 	public Dictionary<Entity, string[,]> Layouts = layouts;
 
 	public void Render()
@@ -28,10 +33,10 @@ internal class Draw
 			{
 				if (layout[x, y][0] != 'w') continue;
 
-				Graphics.Batcher.Image
+				Batcher.Image
 				(
-					Graphics.Atlas.Get(Spritesheet.Tiles, 0),
-					Graphics.Camera.WorldToNative(new(x, y)),
+					Atlas.Get(Spritesheet.Tiles, 0),
+					Camera.WorldToNative(new(x, y)),
 					Color.White
 				);
 			}
@@ -44,10 +49,10 @@ internal class Draw
 			var position = World.Get<Position>(entity);
 			var sprite = World.Get<Sprite>(entity);
 
-			Graphics.Batcher.Image
+			Batcher.Image
 			(
-				Graphics.Atlas.Get(Spritesheet.Sprites, sprite.Index),
-				Graphics.Camera.WorldToNative(position.Vector),
+				Atlas.Get(Spritesheet.Sprites, sprite.Index),
+				Camera.WorldToNative(position.Vector),
 				Color.White
 			);
 		}

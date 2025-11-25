@@ -25,9 +25,9 @@ internal class Atlas
 					Config.TileResolution
 				);
 
-				for (var k = 0; k < frames.Length; k++)
+				for (var z = 0; z < frames.Length; z++)
 				{
-					Packer.Add(CreateIndex(name, index, k), frames[k], clip);
+					Packer.Add(CreateIndex(name, index, z), frames[z], clip);
 				}
 			}
 		}

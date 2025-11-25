@@ -21,8 +21,7 @@ internal class Level : IScene, IDisposable
 		foreach (var it in Directory.EnumerateFiles(path)) Factory.CreateTemplate(it);
 		Factory.CreateRootInstance();
 
-		game.Graphics.Camera.Size = Config.LevelSize;
-		Draw = new(World, game.Graphics, Factory.Layouts);
+		Draw = new(World, game.Batcher, game.Camera, game.Atlas, Factory.Layouts);
 	}
 
 	public void Dispose() => World.Dispose();
