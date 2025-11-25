@@ -4,12 +4,11 @@ using static Decursed.Components;
 
 namespace Decursed;
 
-internal class Draw(World world, Factory factory)
+internal class Draw(World world, Factory factory) : System(world)
 {
-	private readonly World World = world;
 	private readonly Factory Factory = factory;
 
-	public void Render()
+	public override void Update()
 	{
 		var player = World.GetSingletonEntity<Receiver>();
 		var instance = World.OutRelationSingleton<ChildOf>(player);

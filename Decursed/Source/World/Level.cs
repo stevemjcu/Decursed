@@ -28,5 +28,5 @@ internal class Level : IScene, IDisposable
 
 	public void Update() { }
 
-	public void Render() => Draw.Render();
+	public void Render() => Draw.Update();
 }
