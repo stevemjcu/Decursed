@@ -13,7 +13,7 @@ internal class Level : IScene, IDisposable
 	// Systems
 	private readonly Draw Draw;
 
-	public Level(string path, Game game)
+	public Level(string path)
 	{
 		World = new();
 		Factory = new(World);
@@ -21,7 +21,7 @@ internal class Level : IScene, IDisposable
 		foreach (var it in Directory.EnumerateFiles(path)) Factory.CreateTemplate(it);
 		Factory.CreateRootInstance();
 
-		Draw = new(World, game.Batcher, game.Camera, game.Atlas, Factory.Layouts);
+		Draw = new(World, Factory);
 	}
 
 	public void Dispose() => World.Dispose();

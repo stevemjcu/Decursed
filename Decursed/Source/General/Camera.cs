@@ -9,7 +9,7 @@ namespace Decursed;
 internal class Camera(Point2 nativeResolution, Point2 windowResolution, Vector2 size)
 {
 	// World
-	public Vector2 Position;
+	public Vector2 Position = Vector2.Zero;
 	public Vector2 Size = size;
 
 	// Screen

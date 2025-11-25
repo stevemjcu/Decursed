@@ -9,8 +9,8 @@ internal class Factory(World world) : IDisposable
 	private readonly World World = world;
 
 	// Maps tag to template to layout
-	public readonly Dictionary<char, Entity> Templates = [];
-	public readonly Dictionary<Entity, string[,]> Layouts = [];
+	internal readonly Dictionary<char, Entity> Templates = [];
+	internal readonly Dictionary<Entity, string[,]> Layouts = [];
 
 	public void Dispose() => World.Dispose();
 
@@ -60,42 +60,42 @@ internal class Factory(World world) : IDisposable
 
 	private Entity CreatePlayer(Vector2 position)
 	{
-		var entity = CreateActor(position, 8);
+		var entity = CreateActor(position, (int)Config.Actors.Player);
 		World.Set<Receiver>(entity, new());
 		return entity;
 	}
 
 	private Entity CreateRift(Vector2 position, Entity entrance)
 	{
-		var entity = CreateActor(position, 0);
+		var entity = CreateActor(position);
 		World.Relate<ExitsTo>(entity, entrance, new());
 		return entity;
 	}
 
 	private Entity CreateChest(Vector2 position, Entity template)
 	{
-		var entity = CreateActor(position, 2);
+		var entity = CreateActor(position, (int)Config.Actors.ChestOpen);
 		World.Relate<EntersTo>(entity, template, new());
 		return entity;
 	}
 
 	private Entity CreateBox(Vector2 position)
 	{
-		var entity = CreateActor(position, 5);
+		var entity = CreateActor(position, (int)Config.Actors.Box);
 		World.Set<Platform>(entity, new());
 		return entity;
 	}
 
 	private Entity CreateKey(Vector2 position)
 	{
-		var entity = CreateActor(position, 4);
+		var entity = CreateActor(position, (int)Config.Actors.Key);
 		World.Set<Unlock>(entity, new());
 		return entity;
 	}
 
 	private Entity CreateGem(Vector2 position)
 	{
-		var entity = CreateActor(position, 6);
+		var entity = CreateActor(position, (int)Config.Actors.Gem);
 		World.Set<Unlock>(entity, new());
 		return entity;
 	}

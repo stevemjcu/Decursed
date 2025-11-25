@@ -4,28 +4,17 @@ using static Decursed.Components;
 
 namespace Decursed;
 
-internal class Draw
-(
-	World world,
-	Batcher batcher,
-	Camera camera,
-	Atlas atlas,
-	Dictionary<Entity, string[,]> layouts
-)
-	: Renderer(world)
+internal class Draw(World world, Factory factory)
 {
-	private readonly Batcher Batcher = batcher;
-	private readonly Camera Camera = camera;
-	private readonly Atlas Atlas = atlas;
-
-	public Dictionary<Entity, string[,]> Layouts = layouts;
+	private readonly World World = world;
+	private readonly Factory Factory = factory;
 
 	public void Render()
 	{
 		var player = World.GetSingletonEntity<Receiver>();
 		var instance = World.OutRelationSingleton<ChildOf>(player);
 		var template = World.OutRelationSingleton<InstanceOf>(instance);
-		var layout = Layouts[template];
+		var layout = Factory.Layouts[template];
 
 		for (var x = 0; x < layout.GetLength(0); x++)
 		{
@@ -33,10 +22,10 @@ internal class Draw
 			{
 				if (layout[x, y][0] != 'w') continue;
 
-				Batcher.Image
+				Game.Batcher.Image
 				(
-					Atlas.Get(Spritesheet.Tiles, 0),
-					Camera.WorldToNative(new(x, y)),
+					Game.Atlas.Get(Config.Spritesheet.Tiles, 0),
+					Game.Camera.WorldToNative(new(x, y)),
 					Color.White
 				);
 			}
@@ -49,10 +38,10 @@ internal class Draw
 			var position = World.Get<Position>(entity);
 			var sprite = World.Get<Sprite>(entity);
 
-			Batcher.Image
+			Game.Batcher.Image
 			(
-				Atlas.Get(Spritesheet.Sprites, sprite.Index),
-				Camera.WorldToNative(position.Vector),
+				Game.Atlas.Get(Config.Spritesheet.Actors, sprite.Index),
+				Game.Camera.WorldToNative(position.Vector),
 				Color.White
 			);
 		}
