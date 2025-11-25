@@ -13,11 +13,12 @@ internal class Atlas
 		var frames = new Aseprite(path).RenderAllFrames();
 		var size = frames[0].Size / Config.TileResolution;
 
-		for (var i = 0; i < size.X; i++)
+		for (var x = 0; x < size.X; x++)
 		{
-			for (var j = 0; j < size.Y; j++)
+			for (var y = 0; y < size.Y; y++)
 			{
-				var position = new Point2(i, j);
+				var index = size.X * y + x;
+				var position = new Point2(x, y);
 				var clip = new RectInt
 				(
 					position * Config.TileResolution,
@@ -26,7 +27,7 @@ internal class Atlas
 
 				for (var k = 0; k < frames.Length; k++)
 				{
-					Packer.Add(CreateIndex(name, position, k), frames[k], clip);
+					Packer.Add(CreateIndex(name, index, k), frames[k], clip);
 				}
 			}
 		}
@@ -43,12 +44,12 @@ internal class Atlas
 		}
 	}
 
-	public Subtexture Get(string name, Point2 position, int frame = 0) =>
-		Subtextures[CreateIndex(name, position, frame)];
+	public Subtexture Get(string name, int index, int frame = 0) =>
+		Subtextures[CreateIndex(name, index, frame)];
 
-	public Subtexture Get(IFormattable name, Point2 position, int frame = 0) =>
-	Subtextures[CreateIndex(name.ToString()!, position, frame)];
+	public Subtexture Get(IFormattable name, int index, int frame = 0) =>
+		Subtextures[CreateIndex(name.ToString()!, index, frame)];
 
-	private static string CreateIndex(string name, Point2 position, int frame) =>
-		string.Join('/', [name, position.X, position.Y, frame]);
+	private static string CreateIndex(string name, int index, int frame) =>
+		string.Join('/', [name, index, frame]);
 }

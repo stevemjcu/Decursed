@@ -1,5 +1,5 @@
-﻿using MoonTools.ECS;
-using System.Numerics;
+﻿using Foster.Framework;
+using MoonTools.ECS;
 using static Decursed.Components;
 
 namespace Decursed;
@@ -26,9 +26,14 @@ internal class Draw
 		{
 			for (var y = 0; y < layout.GetLength(0); y++)
 			{
-				var position = new Vector2(x, y);
+				if (layout[x, y][0] != 'w') continue;
 
-				// TODO: Render tile
+				Graphics.Batcher.Image
+				(
+					Graphics.Atlas.Get(Spritesheet.Tiles, 0),
+					Graphics.Camera.WorldToNative(new(x, y)),
+					Color.White
+				);
 			}
 		}
 
@@ -39,7 +44,12 @@ internal class Draw
 			var position = World.Get<Position>(entity);
 			var sprite = World.Get<Sprite>(entity);
 
-			// TODO: Render sprite
+			Graphics.Batcher.Image
+			(
+				Graphics.Atlas.Get(Spritesheet.Sprites, sprite.Index),
+				Graphics.Camera.WorldToNative(position.Vector),
+				Color.White
+			);
 		}
 	}
 }

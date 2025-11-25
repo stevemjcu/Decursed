@@ -65,7 +65,7 @@ internal class Game : App
 	private void DrawCursor()
 	{
 		var position = Graphics.Camera.WindowToNative((Point2)Input.Mouse.Position);
-		var subtexture = Graphics.Atlas.Get(Spritesheet.Sprites, new(2, 1));
+		var subtexture = Graphics.Atlas.Get(Spritesheet.Sprites, 1);
 		Graphics.Batcher.Image(subtexture, position, Color.White);
 	}
 }

@@ -47,6 +47,7 @@ internal class Factory(World world) : IDisposable
 					'C' or 'c' => CreateChest(position, Templates[value[1]]),
 					'B' or 'b' => CreateBox(position),
 					'K' or 'k' => CreateKey(position),
+					'G' or 'g' => CreateGem(position),
 					_ => throw new Exception($"Invalid entity: {value[0]}"),
 				};
 
@@ -59,35 +60,42 @@ internal class Factory(World world) : IDisposable
 
 	private Entity CreatePlayer(Vector2 position)
 	{
-		var entity = CreateActor(position);
+		var entity = CreateActor(position, 8);
 		World.Set<Receiver>(entity, new());
 		return entity;
 	}
 
 	private Entity CreateRift(Vector2 position, Entity entrance)
 	{
-		var entity = CreateActor(position);
+		var entity = CreateActor(position, 0);
 		World.Relate<ExitsTo>(entity, entrance, new());
 		return entity;
 	}
 
 	private Entity CreateChest(Vector2 position, Entity template)
 	{
-		var entity = CreateActor(position);
+		var entity = CreateActor(position, 2);
 		World.Relate<EntersTo>(entity, template, new());
 		return entity;
 	}
 
 	private Entity CreateBox(Vector2 position)
 	{
-		var entity = CreateActor(position);
+		var entity = CreateActor(position, 5);
 		World.Set<Platform>(entity, new());
 		return entity;
 	}
 
 	private Entity CreateKey(Vector2 position)
 	{
-		var entity = CreateActor(position);
+		var entity = CreateActor(position, 4);
+		World.Set<Unlock>(entity, new());
+		return entity;
+	}
+
+	private Entity CreateGem(Vector2 position)
+	{
+		var entity = CreateActor(position, 6);
 		World.Set<Unlock>(entity, new());
 		return entity;
 	}

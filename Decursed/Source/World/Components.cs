@@ -7,10 +7,10 @@ internal static class Components
 	#region Capabilities
 
 	// Can be drawn.
-	public record struct Sprite(int Id);
+	public record struct Sprite(int Index);
 
 	// Can be animated.
-	public record struct Animation(int Tag, int Frame);
+	public record struct Animation(int Index, int Frame);
 
 	// Can be positioned.
 	public record struct Position(Vector2 Vector);
