@@ -10,8 +10,8 @@ internal class Level : IScene, IDisposable
 	private readonly World World;
 	private readonly Factory Factory;
 
-	// Systems
-	private readonly Draw Draw;
+	private readonly List<System> UpdateSystems;
+	private readonly List<System> RenderSystems;
 
 	public Level(string path)
 	{
@@ -21,12 +21,27 @@ internal class Level : IScene, IDisposable
 		foreach (var it in Directory.EnumerateFiles(path)) Factory.CreateTemplate(it);
 		Factory.CreateRootInstance();
 
-		Draw = new(World, Factory);
+		UpdateSystems =
+		[
+			new Input(World),
+			new Motion(World),
+		];
+
+		RenderSystems =
+		[
+			new Draw(World, Factory),
+		];
 	}
 
 	public void Dispose() => World.Dispose();
 
-	public void Update() { }
+	public void Update()
+	{
+		foreach (var it in UpdateSystems) it.Update();
+	}
 
-	public void Render() => Draw.Update();
+	public void Render()
+	{
+		foreach (var it in RenderSystems) it.Update();
+	}
 }

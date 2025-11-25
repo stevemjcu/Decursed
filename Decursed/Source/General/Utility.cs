@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using Foster.Framework;
+using MoonTools.ECS;
 using System.Globalization;
 
 namespace Decursed;
@@ -7,7 +8,7 @@ namespace Decursed;
 /// <summary>
 /// Contains various helper methods.
 /// </summary>
-internal class Utility
+internal static class Utility
 {
 	public static string[,] ParseCsv(string path, Point2 size)
 	{
@@ -27,5 +28,12 @@ internal class Utility
 		}
 
 		return grid;
+	}
+
+	public static bool TryGet<T>(this World world, in Entity entity, out T component) where T : unmanaged
+	{
+		var has = world.Has<T>(entity);
+		component = has ? world.Get<T>(entity) : default;
+		return has;
 	}
 }
