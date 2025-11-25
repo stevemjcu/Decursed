@@ -7,19 +7,16 @@ namespace Decursed;
 /// </summary>
 internal class Level : IScene, IDisposable
 {
-	private readonly World World;
-	private readonly Factory Factory;
+	private readonly World World = new();
 
 	private readonly List<System> UpdateSystems;
 	private readonly List<System> RenderSystems;
 
-	public Level(string path)
+	public Level(string path, Resources resources)
 	{
-		World = new();
-		Factory = new(World);
-
-		foreach (var it in Directory.EnumerateFiles(path)) Factory.CreateTemplate(it);
-		Factory.CreateRootInstance();
+		var factory = new Factory(World);
+		foreach (var it in Directory.EnumerateFiles(path)) factory.CreateTemplate(it);
+		factory.CreateRootInstance();
 
 		UpdateSystems =
 		[
@@ -29,7 +26,7 @@ internal class Level : IScene, IDisposable
 
 		RenderSystems =
 		[
-			new Draw(World, Factory),
+			new Draw(World, factory, resources),
 		];
 	}
 

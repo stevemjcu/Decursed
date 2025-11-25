@@ -7,9 +7,10 @@ namespace Decursed;
 /// <summary>
 /// Renders the current room and its contents.
 /// </summary>
-internal class Draw(World world, Factory factory) : System(world)
+internal class Draw(World world, Factory factory, Resources resources) : System(world)
 {
 	private readonly Factory Factory = factory;
+	private readonly Resources Resources = resources;
 
 	public override void Update()
 	{
@@ -26,10 +27,10 @@ internal class Draw(World world, Factory factory) : System(world)
 			{
 				if (layout[x, y][0] != 'w') continue;
 
-				Game.Batcher.Image
+				Resources.Batcher.Image
 				(
-					Game.Atlas.Get(Config.Spritesheet.Tiles, 0),
-					Game.Camera.WorldToNative(new(x, y)),
+					Resources.Atlas.Get(Config.Spritesheet.Tiles, 0),
+					Resources.Camera.WorldToNative(new(x, y)),
 					Color.White
 				);
 			}
@@ -40,10 +41,10 @@ internal class Draw(World world, Factory factory) : System(world)
 			if (!World.TryGet<Sprite>(it, out var sprite) ||
 				!World.TryGet<Position>(it, out var position)) continue;
 
-			Game.Batcher.Image
+			Resources.Batcher.Image
 			(
-				Game.Atlas.Get(Config.Spritesheet.Actors, sprite.Index),
-				Game.Camera.WorldToNative(position.Vector),
+				Resources.Atlas.Get(Config.Spritesheet.Actors, sprite.Index),
+				Resources.Camera.WorldToNative(position.Vector),
 				Color.White
 			);
 		}

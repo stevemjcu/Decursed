@@ -8,13 +8,7 @@ namespace Decursed;
 /// </summary>
 internal class Game : App
 {
-#pragma warning disable CS8618
-	internal static Batcher Batcher;
-	internal static Target Buffer;
-	internal static Camera Camera;
-	internal static Atlas Atlas;
-#pragma warning restore CS8618
-
+	internal readonly Resources Resources;
 	internal readonly Stack<IScene> Scenes = [];
 
 	public Game() : base
@@ -24,15 +18,19 @@ internal class Game : App
 		Config.WindowResolution.Y
 	)
 	{
-		Batcher = new(GraphicsDevice);
-		Buffer = new(GraphicsDevice, Config.NativeResolution.X, Config.NativeResolution.Y);
-		Camera = new(Config.NativeResolution, Config.WindowResolution, Config.LevelSize);
-		Atlas = new(GraphicsDevice);
+		var atlas = new Atlas(GraphicsDevice);
+		foreach (var it in Directory.EnumerateFiles(Config.TexturePath)) atlas.Add(it);
+		atlas.Pack();
 
-		foreach (var it in Directory.EnumerateFiles(Config.TexturePath)) Atlas.Add(it);
-		Atlas.Pack();
+		Resources = new()
+		{
+			Batcher = new(GraphicsDevice),
+			Buffer = new(GraphicsDevice, Config.NativeResolution.X, Config.NativeResolution.Y),
+			Camera = new(Config.WindowResolution, Config.NativeResolution, Config.LevelSize),
+			Atlas = atlas
+		};
 
-		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00")));
+		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00"), Resources));
 	}
 
 	protected override void Startup() => Window.SetMouseVisible(false);
@@ -44,30 +42,30 @@ internal class Game : App
 	protected override void Render()
 	{
 		Window.Clear(Color.Black);
-		Buffer.Clear(Color.Black);
+		Resources.Buffer.Clear(Color.Black);
 
 		Scenes.Peek().Render();
 		DrawCursor();
 
 		// Render to buffer
-		Batcher.Render(Buffer);
-		Batcher.Clear();
+		Resources.Batcher.Render(Resources.Buffer);
+		Resources.Batcher.Clear();
 
-		Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
-		Batcher.PushMatrix(Vector2.Zero, new(Config.WindowScale), 0);
-		Batcher.Image(Buffer, Color.White);
-		Batcher.PopMatrix();
-		Batcher.PopSampler();
+		Resources.Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
+		Resources.Batcher.PushMatrix(Vector2.Zero, new(Config.WindowScale), 0);
+		Resources.Batcher.Image(Resources.Buffer, Color.White);
+		Resources.Batcher.PopMatrix();
+		Resources.Batcher.PopSampler();
 
 		// Render to window
-		Batcher.Render(Window);
-		Batcher.Clear();
+		Resources.Batcher.Render(Window);
+		Resources.Batcher.Clear();
 	}
 
 	private void DrawCursor()
 	{
-		var position = Camera.WindowToNative((Point2)Input.Mouse.Position);
-		var subtexture = Atlas.Get(Config.Spritesheet.Actors, 1);
-		Batcher.Image(subtexture, position, Color.White);
+		var position = Resources.Camera.WindowToNative((Point2)Input.Mouse.Position);
+		var subtexture = Resources.Atlas.Get(Config.Spritesheet.Actors, 1);
+		Resources.Batcher.Image(subtexture, position, Color.White);
 	}
 }
