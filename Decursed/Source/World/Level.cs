@@ -16,7 +16,12 @@ internal class Level : IScene, IDisposable
 	public Level(string path, Resources resources)
 	{
 		Factory = new Factory(World);
-		foreach (var it in Directory.EnumerateFiles(path)) Factory.CreateTemplate(it);
+
+		foreach (var it in Directory.EnumerateFiles(path))
+		{
+			Factory.CreateTemplate(it);
+		}
+
 		Factory.CreateRootInstance();
 
 		UpdateSystems =
@@ -39,11 +44,17 @@ internal class Level : IScene, IDisposable
 
 	public void Update()
 	{
-		foreach (var it in UpdateSystems) it.Update();
+		foreach (var it in UpdateSystems)
+		{
+			it.Update();
+		}
 	}
 
 	public void Render()
 	{
-		foreach (var it in RenderSystems) it.Update();
+		foreach (var it in RenderSystems)
+		{
+			it.Update();
+		}
 	}
 }

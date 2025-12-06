@@ -19,7 +19,12 @@ internal class Game : App, IDisposable
 	)
 	{
 		var atlas = new Atlas(GraphicsDevice);
-		foreach (var it in Directory.EnumerateFiles(Config.TexturePath)) atlas.Add(it);
+
+		foreach (var it in Directory.EnumerateFiles(Config.TexturePath))
+		{
+			atlas.Add(it);
+		}
+
 		atlas.Pack();
 
 		Resources = new()
@@ -36,7 +41,12 @@ internal class Game : App, IDisposable
 	public new void Dispose()
 	{
 		Resources.Dispose();
-		foreach (var it in Scenes) it.Dispose();
+
+		foreach (var it in Scenes)
+		{
+			it.Dispose();
+		}
+
 		base.Dispose();
 	}
 

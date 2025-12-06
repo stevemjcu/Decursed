@@ -15,7 +15,10 @@ internal class Factory(World world) : IDisposable
 	internal readonly Dictionary<char, Entity> Templates = [];
 	internal readonly Dictionary<Entity, string[,]> Layouts = [];
 
-	public void Dispose() => World.Dispose();
+	public void Dispose()
+	{
+		World.Dispose();
+	}
 
 	public Entity CreateTemplate(string path)
 	{
@@ -27,7 +30,10 @@ internal class Factory(World world) : IDisposable
 		return template;
 	}
 
-	public Entity CreateRootInstance() => CreateInstance(Templates['0'], null);
+	public Entity CreateRootInstance()
+	{
+		return CreateInstance(Templates['0'], null);
+	}
 
 	public Entity CreateInstance(Entity template, Entity? entrance)
 	{
@@ -42,7 +48,10 @@ internal class Factory(World world) : IDisposable
 				var position = new Vector2(x, y);
 				var value = layout[x, y];
 
-				if (value[0] == '-' || value[0] == 'w') continue;
+				if (value[0] == '-' || value[0] == 'w')
+				{
+					continue;
+				}
 
 				var entity = value[0] switch
 				{

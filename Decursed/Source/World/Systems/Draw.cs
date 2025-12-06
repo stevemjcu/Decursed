@@ -25,7 +25,10 @@ internal class Draw(World world, Factory factory, Resources resources) : System(
 		{
 			for (var y = 0; y < layout.GetLength(0); y++)
 			{
-				if (layout[x, y][0] != 'w') continue;
+				if (layout[x, y][0] != 'w')
+				{
+					continue;
+				}
 
 				Resources.Batcher.Image
 				(
@@ -38,8 +41,15 @@ internal class Draw(World world, Factory factory, Resources resources) : System(
 
 		foreach (var it in World.InRelations<ChildOf>(instance))
 		{
-			if (!World.Has<Sprite>(it)) continue;
-			if (!World.Has<Position>(it)) continue;
+			if (!World.Has<Sprite>(it))
+			{
+				continue;
+			}
+
+			if (!World.Has<Position>(it))
+			{
+				continue;
+			}
 
 			ref var sprite = ref World.Get<Sprite>(it);
 			ref var position = ref World.Get<Position>(it);
