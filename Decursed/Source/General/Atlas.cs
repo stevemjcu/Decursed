@@ -5,11 +5,18 @@ namespace Decursed;
 /// <summary>
 /// Packs spritesheets into one texture.
 /// </summary>
-internal class Atlas(GraphicsDevice device)
+internal class Atlas(GraphicsDevice device) : IDisposable
 {
 	private readonly GraphicsDevice Device = device;
 	private readonly Packer Packer = new();
+
+	private Texture? Texture;
 	private readonly Dictionary<string, Subtexture> Subtextures = [];
+
+	public void Dispose()
+	{
+		Texture?.Dispose();
+	}
 
 	public void Add(string path)
 	{
@@ -38,20 +45,26 @@ internal class Atlas(GraphicsDevice device)
 	public void Pack()
 	{
 		var output = Packer.Pack();
-		var texture = new Texture(Device, output.Pages.Single());
+		Texture = new Texture(Device, output.Pages.Single());
 
 		foreach (var it in output.Entries)
 		{
-			Subtextures.Add(it.Name, new(texture, it.Source, it.Frame));
+			Subtextures.Add(it.Name, new(Texture, it.Source, it.Frame));
 		}
 	}
 
-	public Subtexture Get(IFormattable name, int index, int frame = 0) =>
-		Get(name.ToString()!, index, frame);
+	public Subtexture Get(IFormattable name, int index, int frame = 0)
+	{
+		return Get(name.ToString()!, index, frame);
+	}
 
-	public Subtexture Get(string name, int index, int frame = 0) =>
-		Subtextures[CreateIndex(name, index, frame)];
+	public Subtexture Get(string name, int index, int frame = 0)
+	{
+		return Subtextures[CreateIndex(name, index, frame)];
+	}
 
-	private static string CreateIndex(string name, int index, int frame) =>
-		string.Join('/', [name, index, frame]);
+	private static string CreateIndex(string name, int index, int frame)
+	{
+		return string.Join('/', [name, index, frame]);
+	}
 }

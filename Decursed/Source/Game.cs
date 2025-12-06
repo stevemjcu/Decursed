@@ -6,10 +6,10 @@ namespace Decursed;
 /// <summary>
 /// Manages the game loop.
 /// </summary>
-internal class Game : App
+internal class Game : App, IDisposable
 {
-	internal readonly Resources Resources;
-	internal readonly Stack<IScene> Scenes = [];
+	private readonly Resources Resources;
+	private readonly Stack<IScene> Scenes = [];
 
 	public Game() : base
 	(
@@ -33,11 +33,24 @@ internal class Game : App
 		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00"), Resources));
 	}
 
-	protected override void Startup() => Window.SetMouseVisible(false);
+	public new void Dispose()
+	{
+		Resources.Dispose();
+		foreach (var it in Scenes) it.Dispose();
+		base.Dispose();
+	}
+
+	protected override void Startup()
+	{
+		Window.SetMouseVisible(false);
+	}
 
 	protected override void Shutdown() { }
 
-	protected override void Update() => Scenes.Peek().Update();
+	protected override void Update()
+	{
+		Scenes.Peek().Update();
+	}
 
 	protected override void Render()
 	{
@@ -65,7 +78,7 @@ internal class Game : App
 	private void DrawCursor()
 	{
 		var position = Resources.Camera.WindowToNative((Point2)Input.Mouse.Position);
-		var subtexture = Resources.Atlas.Get(Config.Spritesheet.Actors, 1);
+		var subtexture = Resources.Atlas.Get(Config.Spritesheet.Actors, (int)Config.Actors.Cursor);
 		Resources.Batcher.Image(subtexture, position, Color.White);
 	}
 }

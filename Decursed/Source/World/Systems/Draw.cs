@@ -38,8 +38,11 @@ internal class Draw(World world, Factory factory, Resources resources) : System(
 
 		foreach (var it in World.InRelations<ChildOf>(instance))
 		{
-			if (!World.TryGet<Sprite>(it, out var sprite) ||
-				!World.TryGet<Position>(it, out var position)) continue;
+			if (!World.Has<Sprite>(it)) continue;
+			if (!World.Has<Position>(it)) continue;
+
+			ref var sprite = ref World.Get<Sprite>(it);
+			ref var position = ref World.Get<Position>(it);
 
 			Resources.Batcher.Image
 			(

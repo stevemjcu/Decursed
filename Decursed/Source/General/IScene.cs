@@ -3,7 +3,7 @@
 /// <summary>
 /// Manages the game loop within a scope.
 /// </summary>
-internal interface IScene
+internal interface IScene : IDisposable
 {
 	public void Update();
 
