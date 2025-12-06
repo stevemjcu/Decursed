@@ -19,8 +19,4 @@
 		</Content>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\MoonTools.ECS\MoonTools.ECS.csproj" />
-	</ItemGroup>
-
 </Project>
