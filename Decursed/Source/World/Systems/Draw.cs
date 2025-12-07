@@ -34,14 +34,8 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 		var view0 = World.View(new Filter().Include<Sprite>().Include<Position>());
 		var view1 = World.View(new ChildOf(instance));
 
-		// TODO: Get intersection
-		foreach (var it in view1)
+		foreach (var it in view1.Intersect(view0))
 		{
-			if (!view0.Contains(it))
-			{
-				continue;
-			}
-
 			var sprite = World.Get<Sprite>(it).Index;
 			var position = World.Get<Position>(it).Value;
 
