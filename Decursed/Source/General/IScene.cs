@@ -1,8 +1,10 @@
-﻿namespace Decursed;
+﻿using Foster.Framework;
+
+namespace Decursed;
 
 internal interface IScene : IDisposable
 {
-	public void Update();
+	public void Update(Time delta);
 
-	public void Render();
+	public void Render(Time delta);
 }

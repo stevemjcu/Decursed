@@ -1,4 +1,5 @@
-﻿using YetAnotherEcs;
+﻿using Foster.Framework;
+using YetAnotherEcs;
 using static Decursed.Components;
 
 namespace Decursed;
@@ -11,5 +12,5 @@ internal abstract class System(World world)
 
 	protected int Instance => World.Get<ChildOf>(Player).Id;
 
-	public abstract void Update();
+	public abstract void Tick(Time time);
 }

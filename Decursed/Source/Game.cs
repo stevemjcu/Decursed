@@ -5,8 +5,10 @@ namespace Decursed;
 
 internal class Game : App, IDisposable
 {
-	private readonly Graphics Graphics;
-	private readonly Stack<IScene> Scenes = [];
+	internal readonly Graphics Graphics;
+	internal readonly Controls Controls;
+
+	internal readonly Stack<IScene> Scenes = [];
 
 	public Game() : base
 	(
@@ -16,12 +18,10 @@ internal class Game : App, IDisposable
 	)
 	{
 		var atlas = new Atlas(GraphicsDevice);
-
 		foreach (var it in Directory.EnumerateFiles(Config.TexturePath))
 		{
 			atlas.Add(it);
 		}
-
 		atlas.Pack();
 
 		Graphics = new()
@@ -32,7 +32,8 @@ internal class Game : App, IDisposable
 			Atlas = atlas
 		};
 
-		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00"), Graphics));
+		Controls = new(Input);
+		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00"), this));
 	}
 
 	public new void Dispose()
@@ -56,7 +57,7 @@ internal class Game : App, IDisposable
 
 	protected override void Update()
 	{
-		Scenes.Peek().Update();
+		Scenes.Peek().Update(Time);
 	}
 
 	protected override void Render()
@@ -64,12 +65,15 @@ internal class Game : App, IDisposable
 		Window.Clear(Color.Black);
 		Graphics.Buffer.Clear(Color.Black);
 
-		Scenes.Peek().Render();
+		// Render scene to buffer
+
+		Scenes.Peek().Render(Time);
 		DrawCursor();
 
-		// Render to buffer
 		Graphics.Batcher.Render(Graphics.Buffer);
 		Graphics.Batcher.Clear();
+
+		// Render buffer to window
 
 		Graphics.Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
 		Graphics.Batcher.PushMatrix(Vector2.Zero, new(Config.WindowScale), 0);
@@ -77,7 +81,6 @@ internal class Game : App, IDisposable
 		Graphics.Batcher.PopMatrix();
 		Graphics.Batcher.PopSampler();
 
-		// Render to window
 		Graphics.Batcher.Render(Window);
 		Graphics.Batcher.Clear();
 	}

@@ -6,8 +6,10 @@ namespace Decursed;
 
 internal class Draw(World World, Graphics Graphics) : System(World)
 {
-	public override void Update()
+	public override void Tick(Time time)
 	{
+		// Draw environment
+
 		var template = World.Get<InstanceOf>(Instance).Id;
 		var tilemap = World.Get<Tilemap>(template).Value;
 
@@ -28,6 +30,8 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 				);
 			}
 		}
+
+		// Draw actors
 
 		var view0 = World.View(new Filter().Include<Sprite>().Include<Position>());
 		var view1 = World.View(new ChildOf(Instance));
