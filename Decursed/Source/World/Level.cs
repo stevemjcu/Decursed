@@ -12,14 +12,8 @@ internal class Level : IScene, IDisposable
 
 	public Level(string path, Graphics graphics)
 	{
-		Factory = new Factory(World);
-
-		foreach (var it in Directory.EnumerateFiles(path))
-		{
-			Factory.CreateTemplate(it);
-		}
-
-		Factory.CreateRootInstance();
+		Factory = new(World);
+		Factory.LoadLevel(path);
 
 		UpdateSystems =
 		[

@@ -6,6 +6,16 @@ namespace Decursed;
 
 internal class Factory(World World)
 {
+	public void LoadLevel(string path)
+	{
+		foreach (var it in Directory.EnumerateFiles(path))
+		{
+			CreateTemplate(it);
+		}
+
+		CreateRootInstance();
+	}
+
 	public int CreateTemplate(string path)
 	{
 		var tag = char.Parse(Path.GetFileNameWithoutExtension(path));

@@ -8,14 +8,12 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 {
 	public override void Update()
 	{
-		var player = World.View(new Filter().Include<Receiver>())[0];
-		var instance = World.Get<ChildOf>(player).Id;
-		var template = World.Get<InstanceOf>(instance).Id;
+		var template = World.Get<InstanceOf>(Instance).Id;
 		var tilemap = World.Get<Tilemap>(template).Value;
 
 		for (var x = 0; x < tilemap.GetLength(0); x++)
 		{
-			for (var y = 0; y < tilemap.GetLength(0); y++)
+			for (var y = 0; y < tilemap.GetLength(1); y++)
 			{
 				if (tilemap[x, y][0] != 'w')
 				{
@@ -32,9 +30,9 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 		}
 
 		var view0 = World.View(new Filter().Include<Sprite>().Include<Position>());
-		var view1 = World.View(new ChildOf(instance));
+		var view1 = World.View(new ChildOf(Instance));
 
-		foreach (var it in view1.Intersect(view0))
+		foreach (var it in view0.Intersect(view1))
 		{
 			var sprite = World.Get<Sprite>(it).Index;
 			var position = World.Get<Position>(it).Value;
