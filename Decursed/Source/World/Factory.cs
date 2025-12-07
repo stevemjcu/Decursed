@@ -6,52 +6,51 @@ namespace Decursed;
 
 internal class Factory(World World)
 {
-	internal readonly Dictionary<char, int> TemplateByTag = [];
-	internal readonly Dictionary<int, string[,]> LayoutByTemplate = [];
-
 	public int CreateTemplate(string path)
 	{
 		var tag = char.Parse(Path.GetFileNameWithoutExtension(path));
 		var layout = Utility.ParseCsv(path, Config.LevelSize);
-		var template = World.Create();
 
-		TemplateByTag[tag] = template;
-		LayoutByTemplate[template] = layout;
+		var template = World.Create();
+		World.Set(template, new Tag(tag));
+		World.Set(template, new Tilemap(layout));
 
 		return template;
 	}
 
 	public int CreateRootInstance()
 	{
-		return CreateInstance(TemplateByTag['0']);
+		return CreateInstance(World.View(new Tag('0'))[0]);
 	}
 
 	public int CreateInstance(int template, int entrance = -1)
 	{
-		var layout = LayoutByTemplate[template];
 		var instance = World.Create();
 		World.Set(instance, new InstanceOf(template));
 
-		for (var x = 0; x < layout.GetLength(0); x++)
+		var tilemap = World.Get<Tilemap>(template).Value;
+
+		for (var x = 0; x < tilemap.GetLength(0); x++)
 		{
-			for (var y = 0; y < layout.GetLength(1); y++)
+			for (var y = 0; y < tilemap.GetLength(1); y++)
 			{
 				var position = new Vector2(x, y);
-				var value = layout[x, y];
+				var value = tilemap[x, y];
+				var (archetype, tag) = (value[0], value[1]);
 
-				if (value[0] == '-' || value[0] == 'w')
+				if (archetype == '-' || archetype == 'w')
 				{
 					continue;
 				}
 
-				var entity = value[0] switch
+				var entity = archetype switch
 				{
 					'R' or 'r' => entrance == -1 ? CreatePlayer(position) : CreateRift(position, entrance),
-					'C' or 'c' => CreateChest(position, TemplateByTag[value[1]]),
+					'C' or 'c' => CreateChest(position, World.View(new Tag(tag))[0]),
 					'B' or 'b' => CreateBox(position),
 					'K' or 'k' => CreateKey(position),
 					'G' or 'g' => CreateGem(position),
-					_ => throw new Exception($"Invalid entity: {value[0]}"),
+					_ => throw new Exception($"Invalid entity: {archetype}"),
 				};
 
 				World.Set(entity, new ChildOf(instance));

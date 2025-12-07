@@ -17,7 +17,7 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 		{
 			for (var y = 0; y < tilemap.GetLength(0); y++)
 			{
-				if (tilemap[x, y] != 'w')
+				if (tilemap[x, y][0] != 'w')
 				{
 					continue;
 				}
@@ -34,8 +34,14 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 		var view0 = World.View(new Filter().Include<Sprite>().Include<Position>());
 		var view1 = World.View(new ChildOf(instance));
 
-		foreach (var it in view0.Intersect(view1))
+		// TODO: Get intersection
+		foreach (var it in view1)
 		{
+			if (!view0.Contains(it))
+			{
+				continue;
+			}
+
 			var sprite = World.Get<Sprite>(it).Index;
 			var position = World.Get<Position>(it).Value;
 

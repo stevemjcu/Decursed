@@ -4,11 +4,14 @@ namespace Decursed;
 
 internal static class Components
 {
+	// Can be looked up.
+	public record struct Tag(char Value);
+
 	// Can be drawn.
 	public record struct Sprite(int Index);
 
 	// Can be drawn with multiple tiles.
-	public record struct Tilemap(char[,] Value);
+	public record struct Tilemap(string[,] Value);
 
 	// Can be animated.
 	public record struct Animation(int Index, int Frame);
