@@ -8,8 +8,6 @@ internal class Motion(World world) : System(world)
 {
 	public override void Tick(Time time)
 	{
-		// Apply velocities to positions and resolve collisions
-
 		var view = World.View(new Filter().Include<Position>().Include<Velocity>());
 
 		foreach (var it in view)
@@ -20,5 +18,7 @@ internal class Motion(World world) : System(world)
 			position.Value += velocity.Value * time.Delta;
 			World.Set(it, position);
 		}
+
+		// TODO: Resolve collisions
 	}
 }

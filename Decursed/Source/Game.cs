@@ -18,10 +18,12 @@ internal class Game : App, IDisposable
 	)
 	{
 		var atlas = new Atlas(GraphicsDevice);
+
 		foreach (var it in Directory.EnumerateFiles(Config.TexturePath))
 		{
 			atlas.Add(it);
 		}
+
 		atlas.Pack();
 
 		Graphics = new()
