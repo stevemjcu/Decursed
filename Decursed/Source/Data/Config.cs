@@ -3,9 +3,6 @@ using System.Numerics;
 
 namespace Decursed;
 
-/// <summary>
-/// Contains global configuration options.
-/// </summary>
 internal static class Config
 {
 	public const string Title = "Decursed";

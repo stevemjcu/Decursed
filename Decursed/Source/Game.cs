@@ -3,12 +3,9 @@ using System.Numerics;
 
 namespace Decursed;
 
-/// <summary>
-/// Manages the game loop.
-/// </summary>
 internal class Game : App, IDisposable
 {
-	private readonly Graphics Resources;
+	private readonly Graphics Graphics;
 	private readonly Stack<IScene> Scenes = [];
 
 	public Game() : base
@@ -27,7 +24,7 @@ internal class Game : App, IDisposable
 
 		atlas.Pack();
 
-		Resources = new()
+		Graphics = new()
 		{
 			Batcher = new(GraphicsDevice),
 			Buffer = new(GraphicsDevice, Config.NativeResolution.X, Config.NativeResolution.Y),
@@ -35,12 +32,12 @@ internal class Game : App, IDisposable
 			Atlas = atlas
 		};
 
-		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00"), Resources));
+		Scenes.Push(new Level(Path.Combine(Config.LevelPath, "00"), Graphics));
 	}
 
 	public new void Dispose()
 	{
-		Resources.Dispose();
+		Graphics.Dispose();
 
 		foreach (var it in Scenes)
 		{
@@ -65,30 +62,30 @@ internal class Game : App, IDisposable
 	protected override void Render()
 	{
 		Window.Clear(Color.Black);
-		Resources.Buffer.Clear(Color.Black);
+		Graphics.Buffer.Clear(Color.Black);
 
 		Scenes.Peek().Render();
 		DrawCursor();
 
 		// Render to buffer
-		Resources.Batcher.Render(Resources.Buffer);
-		Resources.Batcher.Clear();
+		Graphics.Batcher.Render(Graphics.Buffer);
+		Graphics.Batcher.Clear();
 
-		Resources.Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
-		Resources.Batcher.PushMatrix(Vector2.Zero, new(Config.WindowScale), 0);
-		Resources.Batcher.Image(Resources.Buffer, Color.White);
-		Resources.Batcher.PopMatrix();
-		Resources.Batcher.PopSampler();
+		Graphics.Batcher.PushSampler(new(TextureFilter.Nearest, TextureWrap.Clamp));
+		Graphics.Batcher.PushMatrix(Vector2.Zero, new(Config.WindowScale), 0);
+		Graphics.Batcher.Image(Graphics.Buffer, Color.White);
+		Graphics.Batcher.PopMatrix();
+		Graphics.Batcher.PopSampler();
 
 		// Render to window
-		Resources.Batcher.Render(Window);
-		Resources.Batcher.Clear();
+		Graphics.Batcher.Render(Window);
+		Graphics.Batcher.Clear();
 	}
 
 	private void DrawCursor()
 	{
-		var position = Resources.Camera.WindowToNative((Point2)Input.Mouse.Position);
-		var subtexture = Resources.Atlas.Get(Config.Spritesheet.Actors, (int)Config.Actors.Cursor);
-		Resources.Batcher.Image(subtexture, position, Color.White);
+		var position = Graphics.Camera.WindowToNative((Point2)Input.Mouse.Position);
+		var subtexture = Graphics.Atlas.Get(Config.Spritesheet.Actors, (int)Config.Actors.Cursor);
+		Graphics.Batcher.Image(subtexture, position, Color.White);
 	}
 }

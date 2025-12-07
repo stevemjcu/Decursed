@@ -1,8 +1,5 @@
 ﻿namespace Decursed;
 
-/// <summary>
-/// The entry point of the application.
-/// </summary>
 internal static class Program
 {
 	public static void Main(string[] _)

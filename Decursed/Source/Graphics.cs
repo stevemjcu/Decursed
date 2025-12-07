@@ -2,9 +2,6 @@
 
 namespace Decursed;
 
-/// <summary>
-/// Contains resources created at game start-up.
-/// </summary>
 internal class Graphics : IDisposable
 {
 	public required Batcher Batcher;

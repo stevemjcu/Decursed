@@ -4,9 +4,6 @@ using System.Globalization;
 
 namespace Decursed;
 
-/// <summary>
-/// Contains various helper methods.
-/// </summary>
 internal static class Utility
 {
 	public static string[,] ParseCsv(string path, Point2 size)

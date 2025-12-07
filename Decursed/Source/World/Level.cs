@@ -10,7 +10,7 @@ internal class Level : IScene, IDisposable
 	private readonly List<System> UpdateSystems;
 	private readonly List<System> RenderSystems;
 
-	public Level(string path, Graphics resources)
+	public Level(string path, Graphics graphics)
 	{
 		Factory = new Factory(World);
 
@@ -29,7 +29,7 @@ internal class Level : IScene, IDisposable
 
 		RenderSystems =
 		[
-			new Draw(World, resources),
+			new Draw(World, graphics),
 		];
 	}
 
