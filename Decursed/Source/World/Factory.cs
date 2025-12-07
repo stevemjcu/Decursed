@@ -1,45 +1,36 @@
-﻿using MoonTools.ECS;
-using System.Numerics;
+﻿using System.Numerics;
+using YetAnotherEcs;
 using static Decursed.Components;
 
 namespace Decursed;
 
-/// <summary>
-/// Used to create entities.
-/// </summary>
-internal class Factory(World world) : IDisposable
+internal class Factory(World World)
 {
-	private readonly World World = world;
+	internal readonly Dictionary<char, int> TemplateByTag = [];
+	internal readonly Dictionary<int, string[,]> LayoutByTemplate = [];
 
-	// Maps tag to template to layout
-	internal readonly Dictionary<char, Entity> Templates = [];
-	internal readonly Dictionary<Entity, string[,]> Layouts = [];
-
-	public void Dispose()
-	{
-		World.Dispose();
-	}
-
-	public Entity CreateTemplate(string path)
+	public int CreateTemplate(string path)
 	{
 		var tag = char.Parse(Path.GetFileNameWithoutExtension(path));
 		var layout = Utility.ParseCsv(path, Config.LevelSize);
-		var template = World.CreateEntity();
+		var template = World.Create();
 
-		(Templates[tag], Layouts[template]) = (template, layout);
+		TemplateByTag[tag] = template;
+		LayoutByTemplate[template] = layout;
+
 		return template;
 	}
 
-	public Entity CreateRootInstance()
+	public int CreateRootInstance()
 	{
-		return CreateInstance(Templates['0'], null);
+		return CreateInstance(TemplateByTag['0']);
 	}
 
-	public Entity CreateInstance(Entity template, Entity? entrance)
+	public int CreateInstance(int template, int entrance = -1)
 	{
-		var layout = Layouts[template];
-		var instance = World.CreateEntity();
-		World.Relate<InstanceOf>(instance, template, new());
+		var layout = LayoutByTemplate[template];
+		var instance = World.Create();
+		World.Set(instance, new InstanceOf(template));
 
 		for (var x = 0; x < layout.GetLength(0); x++)
 		{
@@ -55,71 +46,71 @@ internal class Factory(World world) : IDisposable
 
 				var entity = value[0] switch
 				{
-					'R' or 'r' => entrance == null ? CreatePlayer(position) : CreateRift(position, (Entity)entrance),
-					'C' or 'c' => CreateChest(position, Templates[value[1]]),
+					'R' or 'r' => entrance == -1 ? CreatePlayer(position) : CreateRift(position, entrance),
+					'C' or 'c' => CreateChest(position, TemplateByTag[value[1]]),
 					'B' or 'b' => CreateBox(position),
 					'K' or 'k' => CreateKey(position),
 					'G' or 'g' => CreateGem(position),
 					_ => throw new Exception($"Invalid entity: {value[0]}"),
 				};
 
-				World.Relate<ChildOf>(entity, instance, new());
+				World.Set(entity, new ChildOf(instance));
 			}
 		}
 
 		return instance;
 	}
 
-	private Entity CreatePlayer(Vector2 position)
+	private int CreatePlayer(Vector2 position)
 	{
 		var entity = CreateActor(position, (int)Config.Actors.Player);
-		World.Set<Receiver>(entity, new());
+		World.Set(entity, new Receiver());
 		return entity;
 	}
 
-	private Entity CreateRift(Vector2 position, Entity entrance)
+	private int CreateRift(Vector2 position, int entrance)
 	{
 		var entity = CreateActor(position);
-		World.Relate<ExitsTo>(entity, entrance, new());
+		World.Set(entity, new ExitsTo(entrance));
 		return entity;
 	}
 
-	private Entity CreateChest(Vector2 position, Entity template)
+	private int CreateChest(Vector2 position, int template)
 	{
 		var entity = CreateActor(position, (int)Config.Actors.ChestOpen);
-		World.Relate<EntersTo>(entity, template, new());
+		World.Set(entity, new EntersTo(template));
 		return entity;
 	}
 
-	private Entity CreateBox(Vector2 position)
+	private int CreateBox(Vector2 position)
 	{
 		var entity = CreateActor(position, (int)Config.Actors.Box);
-		World.Set<Platform>(entity, new());
+		World.Set(entity, new Platform());
 		return entity;
 	}
 
-	private Entity CreateKey(Vector2 position)
+	private int CreateKey(Vector2 position)
 	{
 		var entity = CreateActor(position, (int)Config.Actors.Key);
-		World.Set<Unlock>(entity, new());
+		World.Set(entity, new Unlock());
 		return entity;
 	}
 
-	private Entity CreateGem(Vector2 position)
+	private int CreateGem(Vector2 position)
 	{
 		var entity = CreateActor(position, (int)Config.Actors.Gem);
-		World.Set<Unlock>(entity, new());
+		World.Set(entity, new Unlock());
 		return entity;
 	}
 
-	private Entity CreateActor(Vector2 position, int sprite = 0)
+	private int CreateActor(Vector2 position, int sprite = 0)
 	{
-		var entity = World.CreateEntity();
-		World.Set<Sprite>(entity, new(sprite));
-		World.Set<Position>(entity, new(position));
-		World.Set<Velocity>(entity, new(Vector2.Zero));
-		World.Set<Gravity>(entity, new());
-		World.Set<Bounds>(entity, new(Config.UnitSize));
+		var entity = World.Create();
+		World.Set(entity, new Sprite(sprite));
+		World.Set(entity, new Position(position));
+		World.Set(entity, new Velocity(Vector2.Zero));
+		World.Set(entity, new Gravity());
+		World.Set(entity, new Bounds(Config.UnitSize));
 		return entity;
 	}
 }

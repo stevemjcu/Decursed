@@ -2,30 +2,28 @@
 
 namespace Decursed;
 
-/// <summary>
-/// Contains all components which can belong to an entity.
-/// </summary>
 internal static class Components
 {
-	#region Capabilities
-
 	// Can be drawn.
 	public record struct Sprite(int Index);
+
+	// Can be drawn with multiple tiles.
+	public record struct Tilemap(char[,] Value);
 
 	// Can be animated.
 	public record struct Animation(int Index, int Frame);
 
 	// Can be positioned.
-	public record struct Position(Vector2 Vector);
+	public record struct Position(Vector2 Value);
 
 	// Can move.
-	public record struct Velocity(Vector2 Vector);
+	public record struct Velocity(Vector2 Value);
 
 	// Can fall.
 	public record struct Gravity();
 
 	// Can collide.
-	public record struct Bounds(Vector2 Vector);
+	public record struct Bounds(Vector2 Value);
 
 	// Can receive input.
 	public record struct Receiver();
@@ -42,21 +40,15 @@ internal static class Components
 	// Can end the level.
 	public record struct Goal();
 
-	#endregion
-
-	#region Relations
-
 	// Is an entrance to a template.
-	public record struct EntersTo();
+	public record struct EntersTo(int Id);
 
 	// Is an exit to an entrance.
-	public record struct ExitsTo();
+	public record struct ExitsTo(int Id);
 
 	// Is an instance of a template.
-	public record struct InstanceOf();
+	public record struct InstanceOf(int Id);
 
 	// Is a child of an entity.
-	public record struct ChildOf();
-
-	#endregion
+	public record struct ChildOf(int Id);
 }

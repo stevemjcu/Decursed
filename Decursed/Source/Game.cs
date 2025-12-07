@@ -8,7 +8,7 @@ namespace Decursed;
 /// </summary>
 internal class Game : App, IDisposable
 {
-	private readonly Resources Resources;
+	private readonly Graphics Resources;
 	private readonly Stack<IScene> Scenes = [];
 
 	public Game() : base

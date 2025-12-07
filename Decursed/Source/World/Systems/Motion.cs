@@ -1,10 +1,7 @@
-﻿using MoonTools.ECS;
+﻿using YetAnotherEcs;
 
 namespace Decursed;
 
-/// <summary>
-/// Applies movement to entities and resolves collisions.
-/// </summary>
 internal class Motion(World world) : System(world)
 {
 	public override void Update() { }

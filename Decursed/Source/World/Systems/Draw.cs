@@ -1,63 +1,48 @@
 ﻿using Foster.Framework;
-using MoonTools.ECS;
+using YetAnotherEcs;
 using static Decursed.Components;
 
 namespace Decursed;
 
-/// <summary>
-/// Renders the current room and its contents.
-/// </summary>
-internal class Draw(World world, Factory factory, Resources resources) : System(world)
+internal class Draw(World World, Graphics Graphics) : System(World)
 {
-	private readonly Factory Factory = factory;
-	private readonly Resources Resources = resources;
-
 	public override void Update()
 	{
-		var player = World.GetSingletonEntity<Receiver>();
-		var instance = World.OutRelationSingleton<ChildOf>(player);
-		var template = World.OutRelationSingleton<InstanceOf>(instance);
+		var player = World.View(new Filter().Include<Receiver>())[0];
+		var instance = World.Get<ChildOf>(player).Id;
+		var template = World.Get<InstanceOf>(instance).Id;
+		var tilemap = World.Get<Tilemap>(template).Value;
 
-		// TODO: Store tilemap on instance
-		var layout = Factory.Layouts[template];
-
-		for (var x = 0; x < layout.GetLength(0); x++)
+		for (var x = 0; x < tilemap.GetLength(0); x++)
 		{
-			for (var y = 0; y < layout.GetLength(0); y++)
+			for (var y = 0; y < tilemap.GetLength(0); y++)
 			{
-				if (layout[x, y][0] != 'w')
+				if (tilemap[x, y] != 'w')
 				{
 					continue;
 				}
 
-				Resources.Batcher.Image
+				Graphics.Batcher.Image
 				(
-					Resources.Atlas.Get(Config.Spritesheet.Tiles, 0),
-					Resources.Camera.WorldToNative(new(x, y)),
+					Graphics.Atlas.Get(Config.Spritesheet.Tiles, 0),
+					Graphics.Camera.WorldToNative(new(x, y)),
 					Color.White
 				);
 			}
 		}
 
-		foreach (var it in World.InRelations<ChildOf>(instance))
+		var view0 = World.View(new Filter().Include<Sprite>().Include<Position>());
+		var view1 = World.View(new ChildOf(instance));
+
+		foreach (var it in view0.Intersect(view1))
 		{
-			if (!World.Has<Sprite>(it))
-			{
-				continue;
-			}
+			var sprite = World.Get<Sprite>(it).Index;
+			var position = World.Get<Position>(it).Value;
 
-			if (!World.Has<Position>(it))
-			{
-				continue;
-			}
-
-			ref var sprite = ref World.Get<Sprite>(it);
-			ref var position = ref World.Get<Position>(it);
-
-			Resources.Batcher.Image
+			Graphics.Batcher.Image
 			(
-				Resources.Atlas.Get(Config.Spritesheet.Actors, sprite.Index),
-				Resources.Camera.WorldToNative(position.Vector),
+				Graphics.Atlas.Get(Config.Spritesheet.Actors, sprite),
+				Graphics.Camera.WorldToNative(position),
 				Color.White
 			);
 		}

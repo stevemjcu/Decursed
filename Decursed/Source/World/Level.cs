@@ -1,10 +1,7 @@
-﻿using MoonTools.ECS;
+﻿using YetAnotherEcs;
 
 namespace Decursed;
 
-/// <summary>
-/// Manages the level and its ECS.
-/// </summary>
 internal class Level : IScene, IDisposable
 {
 	private readonly World World = new();
@@ -13,7 +10,7 @@ internal class Level : IScene, IDisposable
 	private readonly List<System> UpdateSystems;
 	private readonly List<System> RenderSystems;
 
-	public Level(string path, Resources resources)
+	public Level(string path, Graphics resources)
 	{
 		Factory = new Factory(World);
 
@@ -32,15 +29,11 @@ internal class Level : IScene, IDisposable
 
 		RenderSystems =
 		[
-			new Draw(World, Factory, resources),
+			new Draw(World, resources),
 		];
 	}
 
-	public void Dispose()
-	{
-		World.Dispose();
-		Factory.Dispose();
-	}
+	void IDisposable.Dispose() { }
 
 	public void Update()
 	{

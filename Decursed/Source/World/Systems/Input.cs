@@ -1,10 +1,7 @@
-﻿using MoonTools.ECS;
+﻿using YetAnotherEcs;
 
 namespace Decursed;
 
-/// <summary>
-/// Applies inputs to the player.
-/// </summary>
 internal class Input(World world) : System(world)
 {
 	public override void Update() { }

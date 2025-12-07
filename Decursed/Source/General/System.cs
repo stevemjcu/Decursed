@@ -1,4 +1,4 @@
-﻿using MoonTools.ECS;
+﻿using YetAnotherEcs;
 
 namespace Decursed;
 
