@@ -10,14 +10,13 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 	{
 		// Draw environment
 
-		var template = World.Get<InstanceOf>(Instance).Id;
-		var tilemap = World.Get<Tilemap>(template).Value;
+		var tilemap = World.Get<Tilemap>(Instance).Map;
 
 		for (var x = 0; x < tilemap.GetLength(0); x++)
 		{
 			for (var y = 0; y < tilemap.GetLength(1); y++)
 			{
-				if (tilemap[x, y][0] != 'w')
+				if (tilemap[x, y] == 0)
 				{
 					continue;
 				}
@@ -33,13 +32,13 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 
 		// Draw actors
 
-		var view0 = World.View(new Filter().Include<Sprite>().Include<Position>());
-		var view1 = World.View(new ChildOf(Instance));
+		var view0 = World.View(new ChildOf(Instance));
+		var view1 = World.View(new Filter().Include<Sprite, Position>());
 
 		foreach (var it in view0.Intersect(view1))
 		{
 			var sprite = World.Get<Sprite>(it).Index;
-			var position = World.Get<Position>(it).Value;
+			var position = World.Get<Position>(it).Vector;
 
 			Graphics.Batcher.Image
 			(

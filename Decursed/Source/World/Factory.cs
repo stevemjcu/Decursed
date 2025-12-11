@@ -23,7 +23,7 @@ internal class Factory(World World)
 
 		var template = World.Create();
 		World.Set(template, new Tag(tag));
-		World.Set(template, new Tilemap(layout));
+		World.Set(template, new Layout(layout));
 
 		return template;
 	}
@@ -35,21 +35,24 @@ internal class Factory(World World)
 
 	public int CreateInstance(int template, int entrance = -1)
 	{
+		var layout = World.Get<Layout>(template).Map;
+		var tilemap = new int[layout.GetLength(0), layout.GetLength(1)];
+
 		var instance = World.Create();
 		World.Set(instance, new InstanceOf(template));
+		World.Set(instance, new Tilemap(tilemap));
 
-		var tilemap = World.Get<Tilemap>(template).Value;
-
-		for (var x = 0; x < tilemap.GetLength(0); x++)
+		for (var x = 0; x < layout.GetLength(0); x++)
 		{
-			for (var y = 0; y < tilemap.GetLength(1); y++)
+			for (var y = 0; y < layout.GetLength(1); y++)
 			{
 				var position = new Vector2(x, y);
-				var value = tilemap[x, y];
+				var value = layout[x, y];
 				var (archetype, tag) = (value[0], value[1]);
 
 				if (archetype == '-' || archetype == 'w')
 				{
+					tilemap[x, y] = archetype == 'w' ? 1 : 0;
 					continue;
 				}
 
@@ -80,14 +83,14 @@ internal class Factory(World World)
 	private int CreateRift(Vector2 position, int entrance)
 	{
 		var entity = CreateActor(position);
-		World.Set(entity, new ExitsTo(entrance));
+		World.Set(entity, new ExitFor(entrance));
 		return entity;
 	}
 
 	private int CreateChest(Vector2 position, int template)
 	{
 		var entity = CreateActor(position, (int)Config.Actors.ChestOpen);
-		World.Set(entity, new EntersTo(template));
+		World.Set(entity, new EntranceFor(template));
 		return entity;
 	}
 

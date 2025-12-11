@@ -11,6 +11,6 @@ internal class Input(World World, Controls Controls) : System(World)
 		var direction = Controls.Move.Value;
 		var velocity = direction * Config.MoveSpeed;
 
-		World.Set<Velocity>(Player, new(velocity));
+		World.Set(Player, new Velocity(velocity));
 	}
 }
