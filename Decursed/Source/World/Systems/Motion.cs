@@ -36,17 +36,19 @@ internal class Motion(World world) : System(world)
 					var cellB = cellA + it;
 					var rectB = new Rect(cellB, Config.UnitSize);
 
-					// TODO: Ignore pushout if it'd push into another tile
 					if (tilemap[cellB.X, cellB.Y] > 0 && rectA.Overlaps(rectB, out var pushout))
 					{
-						position1 += pushout;
+						var cellC = cellB + pushout.Normalized().RoundToPoint2();
+
+						if (tilemap[cellC.X, cellC.Y] == 0)
+						{
+							position1 += pushout;
+						}
 					}
 				}
 			}
 
 			World.Set(id, new Position(position1));
 		}
-
-		Console.WriteLine(World.Get<Position>(Player).Vector.Y);
 	}
 }
