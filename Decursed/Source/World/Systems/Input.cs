@@ -16,7 +16,7 @@ internal class Input(World World, Controls Controls) : System(World)
 
 		if (jump)
 		{
-			velocity.Y -= Config.JumpImpulse;
+			velocity.Y = Config.JumpImpulse;
 		}
 
 		World.Set(Player, new Velocity(velocity));

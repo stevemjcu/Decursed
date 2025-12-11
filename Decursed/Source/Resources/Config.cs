@@ -19,9 +19,13 @@ internal static class Config
 	public readonly static Vector2 UnitSize = new(1, 1);
 	public readonly static Point2 LevelSize = NativeResolution / TileResolution;
 
-	public const float MoveSpeed = 7.5f;
-	public const float JumpImpulse = 30;
-	public const float Gravity = 2;
+	public const float MoveSpeed = 9f;
+	public const float JumpImpulse = -30;
+	public const float Gravity = 120;
+
+	// FIXME: Higher speeds cause tunneling
+	// 30 tiles/sec = 0.5 tiles/frame
+	public const float TerminalSpeed = 25;
 
 	public static Point2 WindowResolution => NativeResolution * WindowScale;
 

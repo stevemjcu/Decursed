@@ -25,8 +25,12 @@ internal class Motion(World world) : System(world)
 
 			if (World.Has<Gravity>(id))
 			{
-				velocity.Y += Config.Gravity;
+				velocity.Y += Config.Gravity * time.Delta;
 			}
+
+			velocity = velocity.Clamp(
+				new(-Config.TerminalSpeed, -Config.TerminalSpeed),
+				new(+Config.TerminalSpeed, +Config.TerminalSpeed));
 
 			var displacement = velocity * time.Delta;
 			var position1 = position0 + displacement;
