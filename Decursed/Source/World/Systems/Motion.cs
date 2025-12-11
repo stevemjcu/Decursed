@@ -16,16 +16,18 @@ internal class Motion(World world) : System(world)
 	public override void Tick(Time time)
 	{
 		var view = World.View(new Filter().Include<Position, Velocity>());
-		var tilemap = World.Get<Tilemap>(Instance).Map;
+		var tilemap = World.Get<Tilemap>(Instance).Value;
 
 		foreach (var id in view)
 		{
-			var position0 = World.Get<Position>(id).Vector;
-			var velocity = World.Get<Velocity>(id).Vector;
+			var position0 = World.Get<Position>(id).Value;
+			var velocity = World.Get<Velocity>(id).Value;
+			var gravity = World.Has<Gravity>(id);
 
-			if (World.Has<Gravity>(id))
+			if (gravity)
 			{
 				velocity.Y += Config.Gravity * time.Delta;
+				World.Remove<Grounded>(id);
 			}
 
 			velocity = velocity.Clamp(
@@ -35,12 +37,12 @@ internal class Motion(World world) : System(world)
 			var displacement = velocity * time.Delta;
 			var position1 = position0 + displacement;
 
-			if (World.TryGet<Bounds>(id, out var bounds))
+			if (World.TryGet<Hitbox>(id, out var bounds))
 			{
 				foreach (var it in Adjacencies)
 				{
 					var cellA = position1.RoundToPoint2();
-					var rectA = new Rect(position1, bounds.Vector);
+					var rectA = new Rect(position1, bounds.Value);
 
 					var cellB = cellA + it;
 					var rectB = new Rect(cellB, Config.UnitSize);
@@ -56,6 +58,7 @@ internal class Motion(World world) : System(world)
 							if (pushout.Y < 0)
 							{
 								velocity.Y = 0;
+								World.Set(id, new Grounded());
 							}
 						}
 					}

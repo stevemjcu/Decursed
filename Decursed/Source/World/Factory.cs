@@ -35,7 +35,7 @@ internal class Factory(World World)
 
 	public int CreateInstance(int template, int entrance = -1)
 	{
-		var layout = World.Get<Layout>(template).Map;
+		var layout = World.Get<Layout>(template).Value;
 		var tilemap = new int[layout.GetLength(0), layout.GetLength(1)];
 
 		var instance = World.Create();
@@ -122,7 +122,7 @@ internal class Factory(World World)
 		World.Set(entity, new Position(position));
 		World.Set(entity, new Velocity(Vector2.Zero));
 		World.Set(entity, new Gravity());
-		World.Set(entity, new Bounds(Config.UnitSize));
+		World.Set(entity, new Hitbox(Config.UnitSize));
 		return entity;
 	}
 }

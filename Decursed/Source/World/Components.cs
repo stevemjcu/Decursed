@@ -9,10 +9,10 @@ internal static class Components
 	[Indexed] public record struct Tag(char Value);
 
 	// Can be instantiated.
-	public record struct Layout(string[,] Map);
+	public record struct Layout(string[,] Value);
 
 	// Can be composed from tiles.
-	public record struct Tilemap(int[,] Map);
+	public record struct Tilemap(int[,] Value);
 
 	// Can be drawn.
 	public record struct Sprite(int Index);
@@ -21,16 +21,19 @@ internal static class Components
 	public record struct Animation(int Index, int Frame);
 
 	// Can be positioned.
-	public record struct Position(Vector2 Vector);
+	public record struct Position(Vector2 Value);
 
 	// Can move.
-	public record struct Velocity(Vector2 Vector);
+	public record struct Velocity(Vector2 Value);
 
 	// Can fall.
 	public record struct Gravity();
 
+	// Is grounded.
+	public record struct Grounded();
+
 	// Can collide.
-	public record struct Bounds(Vector2 Vector);
+	public record struct Hitbox(Vector2 Value);
 
 	// Can receive input.
 	public record struct Receiver();

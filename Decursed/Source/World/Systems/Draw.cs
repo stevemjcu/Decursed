@@ -10,7 +10,7 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 	{
 		// Draw environment
 
-		var tilemap = World.Get<Tilemap>(Instance).Map;
+		var tilemap = World.Get<Tilemap>(Instance).Value;
 
 		for (var x = 0; x < tilemap.GetLength(0); x++)
 		{
@@ -38,7 +38,7 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 		foreach (var it in view0.Intersect(view1))
 		{
 			var sprite = World.Get<Sprite>(it).Index;
-			var position = World.Get<Position>(it).Vector;
+			var position = World.Get<Position>(it).Value;
 
 			Graphics.Batcher.Image
 			(

@@ -12,9 +12,9 @@ internal class Input(World World, Controls Controls) : System(World)
 		var move = direction * Config.MoveSpeed;
 		var jump = Controls.Jump.Pressed;
 
-		var velocity = World.Get<Velocity>(Player).Vector with { X = move.X };
+		var velocity = World.Get<Velocity>(Player).Value with { X = move.X };
 
-		if (jump)
+		if (jump && World.Has<Grounded>(Player))
 		{
 			velocity.Y = Config.JumpImpulse;
 		}
