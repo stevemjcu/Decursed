@@ -23,6 +23,11 @@ internal class Motion(World world) : System(world)
 			var position0 = World.Get<Position>(id).Vector;
 			var velocity = World.Get<Velocity>(id).Vector;
 
+			if (World.Has<Gravity>(id))
+			{
+				velocity.Y += Config.Gravity;
+			}
+
 			var displacement = velocity * time.Delta;
 			var position1 = position0 + displacement;
 
@@ -43,12 +48,18 @@ internal class Motion(World world) : System(world)
 						if (tilemap[cellC.X, cellC.Y] == 0)
 						{
 							position1 += pushout;
+
+							if (pushout.Y < 0)
+							{
+								velocity.Y = 0;
+							}
 						}
 					}
 				}
 			}
 
 			World.Set(id, new Position(position1));
+			World.Set(id, new Velocity(velocity));
 		}
 	}
 }

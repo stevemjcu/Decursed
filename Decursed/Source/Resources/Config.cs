@@ -20,6 +20,8 @@ internal static class Config
 	public readonly static Point2 LevelSize = NativeResolution / TileResolution;
 
 	public const float MoveSpeed = 7.5f;
+	public const float JumpImpulse = 30;
+	public const float Gravity = 2;
 
 	public static Point2 WindowResolution => NativeResolution * WindowScale;
 
