@@ -20,7 +20,8 @@ internal class Level : IScene, IDisposable
 		[
 			new Input(World, game.Controls),
 			new Motion(World),
-			new Collision(World)
+			new Collision(World),
+			new Stacking(World)
 		];
 
 		RenderSystems =

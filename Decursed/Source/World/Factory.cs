@@ -112,6 +112,7 @@ internal class Factory(World World)
 	{
 		var id = CreateActor(position, (int)Config.Actors.Gem);
 		World.Set<Goal>(id);
+		World.Remove<Gravity>(id);
 		return id;
 	}
 
