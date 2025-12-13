@@ -21,11 +21,11 @@ internal class Factory(World World)
 		var tag = char.Parse(Path.GetFileNameWithoutExtension(path));
 		var layout = Utility.ParseCsv(path, Config.LevelSize);
 
-		var template = World.Create();
-		World.Set(template, new Tag(tag));
-		World.Set(template, new Layout(layout));
+		var id = World.Create();
+		World.Set<Tag>(id, new(tag));
+		World.Set<Layout>(id, new(layout));
 
-		return template;
+		return id;
 	}
 
 	public int CreateRootInstance()
@@ -38,9 +38,9 @@ internal class Factory(World World)
 		var layout = World.Get<Layout>(template).Value;
 		var tilemap = new int[layout.GetLength(0), layout.GetLength(1)];
 
-		var instance = World.Create();
-		World.Set(instance, new InstanceOf(template));
-		World.Set(instance, new Tilemap(tilemap));
+		var id = World.Create();
+		World.Set<InstanceOf>(id, new(template));
+		World.Set<Tilemap>(id, new(tilemap));
 
 		for (var x = 0; x < layout.GetLength(0); x++)
 		{
@@ -66,63 +66,64 @@ internal class Factory(World World)
 					_ => throw new Exception($"Invalid entity: {archetype}"),
 				};
 
-				World.Set(entity, new ChildOf(instance));
+				World.Set<ChildOf>(entity, new(id));
 			}
 		}
 
-		return instance;
+		return id;
 	}
 
 	private int CreatePlayer(Vector2 position)
 	{
-		var entity = CreateActor(position, (int)Config.Actors.Player);
-		World.Set(entity, new Receiver());
-		return entity;
+		var id = CreateActor(position, (int)Config.Actors.Player);
+		World.Set<Receiver>(id);
+		return id;
 	}
 
 	private int CreateRift(Vector2 position, int entrance)
 	{
-		var entity = CreateActor(position);
-		World.Set(entity, new ExitFor(entrance));
-		return entity;
+		var id = CreateActor(position);
+		World.Set<ExitFor>(id, new(entrance));
+		return id;
 	}
 
 	private int CreateChest(Vector2 position, int template)
 	{
-		var entity = CreateActor(position, (int)Config.Actors.ChestOpen);
-		World.Set(entity, new EntranceFor(template));
-		return entity;
+		var id = CreateActor(position, (int)Config.Actors.ChestOpen);
+		World.Set<EntranceFor>(id, new(template));
+		return id;
 	}
 
 	private int CreateBox(Vector2 position)
 	{
-		var entity = CreateActor(position, (int)Config.Actors.Box);
-		World.Set(entity, new Platform());
-		return entity;
+		var id = CreateActor(position, (int)Config.Actors.Box);
+		World.Set<Platform>(id);
+		return id;
 	}
 
 	private int CreateKey(Vector2 position)
 	{
-		var entity = CreateActor(position, (int)Config.Actors.Key);
-		World.Set(entity, new Unlock());
-		return entity;
+		var id = CreateActor(position, (int)Config.Actors.Key);
+		World.Set<Unlock>(id);
+		return id;
 	}
 
 	private int CreateGem(Vector2 position)
 	{
-		var entity = CreateActor(position, (int)Config.Actors.Gem);
-		World.Set(entity, new Unlock());
-		return entity;
+		var id = CreateActor(position, (int)Config.Actors.Gem);
+		World.Set<Goal>(id);
+		return id;
 	}
 
 	private int CreateActor(Vector2 position, int sprite = 0)
 	{
-		var entity = World.Create();
-		World.Set(entity, new Sprite(sprite));
-		World.Set(entity, new Position(position));
-		World.Set(entity, new Velocity(Vector2.Zero));
-		World.Set(entity, new Gravity());
-		World.Set(entity, new Hitbox(Config.UnitSize));
-		return entity;
+		var id = World.Create();
+		World.Set<Sprite>(id, new(sprite));
+		World.Set<Position>(id, new(position));
+		World.Set<Velocity>(id, new(Vector2.Zero));
+		World.Set<Hitbox>(id, new(Config.UnitSize));
+		World.Set<Gravity>(id);
+		World.Set<Active>(id);
+		return id;
 	}
 }

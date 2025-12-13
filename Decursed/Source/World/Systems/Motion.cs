@@ -9,8 +9,7 @@ internal class Motion(World world) : System(world)
 	public override void Update(Time time)
 	{
 		foreach (var id in World
-			.View(new Filter().Include<Position, Velocity>())
-			.Intersect(Local, true))
+			.View(new Filter().Include<Position, Velocity, Active>()))
 		{
 			var position = World.Get<Position>(id).Value;
 			var velocity = World.Get<Velocity>(id).Value;
@@ -19,6 +18,11 @@ internal class Motion(World world) : System(world)
 			{
 				velocity.Y += Config.Gravity * time.Delta;
 				World.Remove<Grounded>(id);
+
+				if (velocity.Y > 0)
+				{
+					World.Set<Falling>(id);
+				}
 			}
 
 			velocity = velocity.Clamp(
@@ -27,8 +31,8 @@ internal class Motion(World world) : System(world)
 
 			position += velocity * time.Delta;
 
-			World.Set(id, new Position(position));
-			World.Set(id, new Velocity(velocity));
+			World.Set<Position>(id, new(position));
+			World.Set<Velocity>(id, new(velocity));
 		}
 	}
 }

@@ -15,7 +15,7 @@ internal abstract class System(World world)
 
 	protected int[,] Tilemap => World.Get<Tilemap>(Room).Value;
 
-	protected IIndexableSet<int> Local => World.View(new ChildOf(Room));
+	protected IIndexableSet<int> Local => World.View<ChildOf>(new(Room));
 
 	public abstract void Update(Time time);
 }

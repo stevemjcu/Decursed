@@ -9,8 +9,7 @@ internal class Collision(World world) : System(world)
 	public override void Update(Time _)
 	{
 		foreach (var id in World
-			.View(new Filter().Include<Position, Velocity, Hitbox>())
-			.Intersect(Local, true))
+			.View(new Filter().Include<Position, Hitbox, Active>()))
 		{
 			foreach (var it in Config.Directions)
 			{
@@ -40,14 +39,15 @@ internal class Collision(World world) : System(world)
 					continue;
 				}
 
-				if (pushout.Y < 0)
+				if (pushout.Y < 0 && World.Has<Velocity>(id))
 				{
 					var velocity = World.Get<Velocity>(id).Value;
-					World.Set(id, new Velocity(velocity with { Y = 0 }));
-					World.Set(id, new Grounded());
+					World.Set<Velocity>(id, new(velocity with { Y = 0 }));
+					World.Set<Grounded>(id);
+					World.Remove<Falling>(id);
 				}
 
-				World.Set(id, new Position(position + pushout));
+				World.Set<Position>(id, new(position + pushout));
 			}
 		}
 	}

@@ -8,7 +8,6 @@ internal class Render(World World, Graphics Graphics) : System(World)
 {
 	public override void Update(Time time)
 	{
-		// Render environment
 		for (var x = 0; x < Tilemap.GetLength(0); x++)
 		{
 			for (var y = 0; y < Tilemap.GetLength(1); y++)
@@ -27,12 +26,10 @@ internal class Render(World World, Graphics Graphics) : System(World)
 			}
 		}
 
-		// Render actors
 		foreach (var it in World
-			.View(new Filter().Include<Sprite, Position>())
-			.Intersect(Local, true))
+			.View(new Filter().Include<Sprite, Position, Active>()))
 		{
-			var sprite = World.Get<Sprite>(it).Index;
+			var sprite = World.Get<Sprite>(it).Value;
 			var position = World.Get<Position>(it).Value;
 
 			Graphics.Batcher.Image

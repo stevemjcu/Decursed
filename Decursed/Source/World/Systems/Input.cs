@@ -19,6 +19,6 @@ internal class Input(World World, Controls Controls) : System(World)
 			velocity.Y = Config.JumpImpulse;
 		}
 
-		World.Set(Player, new Velocity(velocity));
+		World.Set<Velocity>(Player, new(velocity));
 	}
 }

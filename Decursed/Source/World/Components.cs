@@ -15,7 +15,7 @@ internal static class Components
 	public record struct Tilemap(int[,] Value);
 
 	// Can be drawn.
-	public record struct Sprite(int Index);
+	public record struct Sprite(int Value);
 
 	// Can be animated.
 	public record struct Animation(int Index, int Frame);
@@ -31,6 +31,9 @@ internal static class Components
 
 	// Is grounded.
 	public record struct Grounded();
+
+	// Is falling.
+	public record struct Falling();
 
 	// Can collide.
 	public record struct Hitbox(Vector2 Value);
@@ -49,6 +52,9 @@ internal static class Components
 
 	// Can end the level.
 	public record struct Goal();
+
+	// Can be operated on.
+	public record struct Active();
 
 	// Is an entrance for a template.
 	[Indexed] public record struct EntranceFor(int Id);
