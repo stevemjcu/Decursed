@@ -43,4 +43,11 @@ internal static class Config
 		Urn,
 		Player
 	}
+
+	public static readonly List<Point2> Directions =
+	[
+		new(-1, -1), new(+0, -1), new(+1, -1),
+		new(-1, +0), new(+0, +0), new(+1, +0),
+		new(-1, +1), new(+0, +1), new(+1, +1)
+	];
 }

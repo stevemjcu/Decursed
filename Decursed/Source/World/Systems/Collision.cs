@@ -6,23 +6,15 @@ namespace Decursed;
 
 internal class Collision(World world) : System(world)
 {
-	private static readonly List<Point2> Adjacencies =
-	[
-		new(-1, -1), new(+0, -1), new(+1, -1),
-		new(-1, +0), new(+0, +0), new(+1, +0),
-		new(-1, +1), new(+0, +1), new(+1, +1)
-	];
-
 	public override void Update(Time _)
 	{
 		foreach (var id in World
 			.View(new Filter().Include<Position, Velocity, Hitbox>())
 			.Intersect(Local, true))
 		{
-			var position = World.Get<Position>(id).Value;
-
-			foreach (var it in Adjacencies)
+			foreach (var it in Config.Directions)
 			{
+				var position = World.Get<Position>(id).Value;
 				var cell = position.RoundToPoint2() + it;
 
 				// No collision if tile is empty.
