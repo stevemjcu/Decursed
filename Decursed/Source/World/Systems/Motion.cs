@@ -13,18 +13,21 @@ internal class Motion(World world) : System(world)
 		new(-1, +1), new(+0, +1), new(+1, +1)
 	];
 
-	public override void Tick(Time time)
+	public override void Update(Time time)
 	{
-		var view = World.View(new Filter().Include<Position, Velocity>());
-		var tilemap = World.Get<Tilemap>(Instance).Value;
+		ApplyMovement(time);
+		ResolveCollisions();
+	}
 
-		foreach (var id in view)
+	public void ApplyMovement(Time time)
+	{
+		foreach (var id in World.View(
+			new Filter().Include<Position, Velocity>()))
 		{
-			var position0 = World.Get<Position>(id).Value;
+			var position = World.Get<Position>(id).Value;
 			var velocity = World.Get<Velocity>(id).Value;
-			var gravity = World.Has<Gravity>(id);
 
-			if (gravity)
+			if (World.Has<Gravity>(id))
 			{
 				velocity.Y += Config.Gravity * time.Delta;
 				World.Remove<Grounded>(id);
@@ -34,39 +37,56 @@ internal class Motion(World world) : System(world)
 				new(-Config.TerminalSpeed, -Config.TerminalSpeed),
 				new(+Config.TerminalSpeed, +Config.TerminalSpeed));
 
-			var displacement = velocity * time.Delta;
-			var position1 = position0 + displacement;
+			position += velocity * time.Delta;
 
-			if (World.TryGet<Hitbox>(id, out var bounds))
-			{
-				foreach (var it in Adjacencies)
-				{
-					var cellA = position1.RoundToPoint2();
-					var rectA = new Rect(position1, bounds.Value);
-
-					var cellB = cellA + it;
-					var rectB = new Rect(cellB, Config.UnitSize);
-
-					if (tilemap[cellB.X, cellB.Y] > 0 && rectA.Overlaps(rectB, out var pushout))
-					{
-						var cellC = cellB + pushout.Normalized().RoundToPoint2();
-
-						if (tilemap[cellC.X, cellC.Y] == 0)
-						{
-							position1 += pushout;
-
-							if (pushout.Y < 0)
-							{
-								velocity.Y = 0;
-								World.Set(id, new Grounded());
-							}
-						}
-					}
-				}
-			}
-
-			World.Set(id, new Position(position1));
+			World.Set(id, new Position(position));
 			World.Set(id, new Velocity(velocity));
+		}
+	}
+
+	public void ResolveCollisions()
+	{
+		foreach (var id in World.View(
+			new Filter().Include<Position, Velocity, Hitbox>()))
+		{
+			var position = World.Get<Position>(id).Value;
+
+			foreach (var it in Adjacencies)
+			{
+				var cell = position.RoundToPoint2() + it;
+
+				// No collision if tile is empty.
+				if (Tilemap[cell.X, cell.Y] == 0)
+				{
+					continue;
+				}
+
+				var a = new Rect(position, World.Get<Hitbox>(id).Value);
+				var b = new Rect(cell, Config.UnitSize);
+
+				// No collision if tile is non-overlapping.
+				if (!a.Overlaps(b, out var pushout))
+				{
+					continue;
+				}
+
+				cell += pushout.Normalized().RoundToPoint2();
+
+				// No collision if projected tile is non-empty.
+				if (Tilemap[cell.X, cell.Y] != 0)
+				{
+					continue;
+				}
+
+				if (pushout.Y < 0)
+				{
+					var velocity = World.Get<Velocity>(id).Value;
+					World.Set(id, new Velocity(velocity with { Y = 0 }));
+					World.Set(id, new Grounded());
+				}
+
+				World.Set(id, new Position(position + pushout));
+			}
 		}
 	}
 }

@@ -34,7 +34,7 @@ internal class Level : IScene, IDisposable
 	{
 		foreach (var it in UpdateSystems)
 		{
-			it.Tick(time);
+			it.Update(time);
 		}
 	}
 
@@ -42,7 +42,7 @@ internal class Level : IScene, IDisposable
 	{
 		foreach (var it in RenderSystems)
 		{
-			it.Tick(time);
+			it.Update(time);
 		}
 	}
 }

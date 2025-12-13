@@ -6,13 +6,13 @@ namespace Decursed;
 
 internal class Input(World World, Controls Controls) : System(World)
 {
-	public override void Tick(Time time)
+	public override void Update(Time time)
 	{
-		var direction = Controls.Move.Value;
-		var move = direction * Config.MoveSpeed;
+		var move = Controls.Move.Value.X;
 		var jump = Controls.Jump.Pressed;
 
-		var velocity = World.Get<Velocity>(Player).Value with { X = move.X };
+		var velocity = World.Get<Velocity>(Player).Value;
+		velocity.X = move * Config.MoveSpeed;
 
 		if (jump && World.Has<Grounded>(Player))
 		{

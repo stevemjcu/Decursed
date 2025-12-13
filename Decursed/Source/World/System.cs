@@ -12,5 +12,7 @@ internal abstract class System(World world)
 
 	protected int Instance => World.Get<ChildOf>(Player).Id;
 
-	public abstract void Tick(Time time);
+	protected int[,] Tilemap => World.Get<Tilemap>(Instance).Value;
+
+	public abstract void Update(Time time);
 }

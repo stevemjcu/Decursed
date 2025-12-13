@@ -6,7 +6,7 @@ namespace Decursed;
 
 internal class Draw(World World, Graphics Graphics) : System(World)
 {
-	public override void Tick(Time time)
+	public override void Update(Time time)
 	{
 		// Draw environment
 
