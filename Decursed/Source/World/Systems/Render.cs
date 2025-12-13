@@ -30,7 +30,7 @@ internal class Render(World World, Graphics Graphics) : System(World)
 		// Render actors
 		foreach (var it in World
 			.View(new Filter().Include<Sprite, Position>())
-			.Intersect(LocalView))
+			.Intersect(Local, true))
 		{
 			var sprite = World.Get<Sprite>(it).Index;
 			var position = World.Get<Position>(it).Value;

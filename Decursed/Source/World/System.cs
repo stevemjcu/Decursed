@@ -11,11 +11,11 @@ internal abstract class System(World world)
 
 	protected int Player => World.View(new Filter().Include<Receiver>())[0];
 
-	protected int Instance => World.Get<ChildOf>(Player).Id;
+	protected int Room => World.Get<ChildOf>(Player).Id;
 
-	protected int[,] Tilemap => World.Get<Tilemap>(Instance).Value;
+	protected int[,] Tilemap => World.Get<Tilemap>(Room).Value;
 
-	protected IIndexableSet<int> LocalView => World.View(new ChildOf(Instance));
+	protected IIndexableSet<int> Local => World.View(new ChildOf(Room));
 
 	public abstract void Update(Time time);
 }

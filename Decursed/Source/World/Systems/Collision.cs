@@ -15,8 +15,9 @@ internal class Collision(World world) : System(world)
 
 	public override void Update(Time _)
 	{
-		foreach (var id in World.View(
-			new Filter().Include<Position, Velocity, Hitbox>()))
+		foreach (var id in World
+			.View(new Filter().Include<Position, Velocity, Hitbox>())
+			.Intersect(Local, true))
 		{
 			var position = World.Get<Position>(id).Value;
 

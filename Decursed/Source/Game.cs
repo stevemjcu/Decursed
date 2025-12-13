@@ -10,12 +10,10 @@ internal class Game : App, IDisposable
 
 	internal readonly Stack<IScene> Scenes = [];
 
-	public Game() : base
-	(
+	public Game() : base(
 		Config.Title,
 		Config.WindowResolution.X,
-		Config.WindowResolution.Y
-	)
+		Config.WindowResolution.Y)
 	{
 		var atlas = new Atlas(GraphicsDevice);
 
