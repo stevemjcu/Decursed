@@ -25,7 +25,7 @@ internal class Level : IScene, IDisposable
 
 		RenderSystems =
 		[
-			new Draw(World, game.Graphics),
+			new Render(World, game.Graphics),
 		];
 	}
 

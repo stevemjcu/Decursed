@@ -4,19 +4,16 @@ using static Decursed.Components;
 
 namespace Decursed;
 
-internal class Draw(World World, Graphics Graphics) : System(World)
+internal class Render(World World, Graphics Graphics) : System(World)
 {
 	public override void Update(Time time)
 	{
-		// Draw environment
-
-		var tilemap = World.Get<Tilemap>(Instance).Value;
-
-		for (var x = 0; x < tilemap.GetLength(0); x++)
+		// Render environment
+		for (var x = 0; x < Tilemap.GetLength(0); x++)
 		{
-			for (var y = 0; y < tilemap.GetLength(1); y++)
+			for (var y = 0; y < Tilemap.GetLength(1); y++)
 			{
-				if (tilemap[x, y] == 0)
+				if (Tilemap[x, y] == 0)
 				{
 					continue;
 				}
@@ -30,12 +27,10 @@ internal class Draw(World World, Graphics Graphics) : System(World)
 			}
 		}
 
-		// Draw actors
-
-		var view0 = World.View(new ChildOf(Instance));
-		var view1 = World.View(new Filter().Include<Sprite, Position>());
-
-		foreach (var it in view0.Intersect(view1))
+		// Render actors
+		foreach (var it in World
+			.View(new Filter().Include<Sprite, Position>())
+			.Intersect(LocalView))
 		{
 			var sprite = World.Get<Sprite>(it).Index;
 			var position = World.Get<Position>(it).Value;
