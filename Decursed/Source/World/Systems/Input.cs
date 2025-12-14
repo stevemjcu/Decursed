@@ -13,9 +13,10 @@ internal class Input(World World, Controls Controls) : System(World)
 
 	public override void Update(Time time)
 	{
+		var view = World.View<HeldBy>(new(Player));
+
 		if (Controls.Interact.Pressed)
 		{
-			var view = World.View<HeldBy>(new(Player));
 			if (view.Count > 0)
 			{
 				World.Set(view[0], World.Get<Velocity>(Player));
@@ -35,7 +36,7 @@ internal class Input(World World, Controls Controls) : System(World)
 
 		if (Controls.Jump.Pressed && World.Has<Grounded>(Player))
 		{
-			JumpFrame = Config.JumpFrames;
+			JumpFrame = view.Count == 0 ? Config.JumpFrames : Config.ReducedJumpFrames;
 		}
 
 		if (JumpFrame-- > 0)

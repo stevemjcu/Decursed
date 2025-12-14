@@ -26,6 +26,7 @@ internal static class Config
 	public const float MoveSpeed = 8f;
 	public const float JumpSpeed = -25;
 	public const int JumpFrames = 5;
+	public const int ReducedJumpFrames = 3;
 	public const float Gravity = 120;
 
 	// FIXME: Higher speeds cause tunneling
