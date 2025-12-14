@@ -6,11 +6,11 @@ namespace Decursed;
 
 internal class Stacking(World world) : System(world)
 {
-	private static Filter Platforms = new Filter()
-		.Include<Position, Platform, Grounded, Hitbox, Active>();
-
 	private static Filter Actors = new Filter()
 		.Include<Position, Velocity, Falling, Hitbox, Active>();
+
+	private static Filter Platforms = new Filter()
+		.Include<Position, Platform, Grounded, Hitbox, Active>();
 
 	public override void Update(Time time)
 	{
@@ -44,6 +44,12 @@ internal class Stacking(World world) : System(world)
 
 				World.Set<Position>(id0, new(position0 + pushout));
 			}
+		}
+
+		if (World.Has<Holding>(Player))
+		{
+			var id = World.Get<Holding>(Player).Id;
+			World.Set(id, World.Get<Position>(Player));
 		}
 	}
 }

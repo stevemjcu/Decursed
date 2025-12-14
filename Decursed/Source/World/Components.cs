@@ -68,4 +68,7 @@ internal static class Components
 
 	// Is a child of an entity.
 	[Indexed] public record struct ChildOf(int Id);
+
+	// Is holding an entity.
+	[Indexed] public record struct Holding(int Id);
 }

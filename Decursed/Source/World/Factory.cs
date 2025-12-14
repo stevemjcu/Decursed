@@ -92,6 +92,7 @@ internal class Factory(World World)
 	{
 		var id = CreateActor(position, (int)Config.Actors.ChestOpen);
 		World.Set<EntranceFor>(id, new(template));
+		World.Set<Portable>(id);
 		return id;
 	}
 
@@ -99,6 +100,7 @@ internal class Factory(World World)
 	{
 		var id = CreateActor(position, (int)Config.Actors.Box);
 		World.Set<Platform>(id);
+		World.Set<Portable>(id);
 		return id;
 	}
 
@@ -106,6 +108,7 @@ internal class Factory(World World)
 	{
 		var id = CreateActor(position, (int)Config.Actors.Key);
 		World.Set<Unlock>(id);
+		World.Set<Portable>(id);
 		return id;
 	}
 
@@ -114,6 +117,7 @@ internal class Factory(World World)
 		var id = CreateActor(position, (int)Config.Actors.Gem);
 		World.Set<Hitbox>(id, new(Config.ThinBox));
 		World.Set<Goal>(id);
+		World.Remove<Velocity>(id);
 		World.Remove<Gravity>(id);
 		return id;
 	}
