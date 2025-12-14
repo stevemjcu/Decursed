@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Foster.Framework;
+using System.Numerics;
 using YetAnotherEcs;
 
 namespace Decursed;
@@ -36,7 +37,7 @@ internal static class Components
 	public record struct Falling();
 
 	// Can collide.
-	public record struct Hitbox(Vector2 Value);
+	public record struct Hitbox(Rect Value);
 
 	// Can receive input.
 	public record struct Receiver();

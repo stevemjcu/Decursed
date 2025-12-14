@@ -19,7 +19,10 @@ internal static class Config
 	public readonly static Vector2 UnitSize = new(1, 1);
 	public readonly static Point2 LevelSize = NativeResolution / TileResolution;
 
-	public const float MoveSpeed = 9f;
+	public readonly static Rect StandardBox = new(0, 0, 1, 1);
+	public readonly static Rect ThinBox = new(0.125f, 0, 0.75f, 1);
+
+	public const float MoveSpeed = 7f;
 	public const float JumpImpulse = -30;
 	public const float Gravity = 120;
 

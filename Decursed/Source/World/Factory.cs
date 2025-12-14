@@ -77,6 +77,7 @@ internal class Factory(World World)
 	{
 		var id = CreateActor(position, (int)Config.Actors.Player);
 		World.Set<Receiver>(id);
+		World.Set<Hitbox>(id, new(Config.ThinBox));
 		return id;
 	}
 
@@ -111,6 +112,7 @@ internal class Factory(World World)
 	private int CreateGem(Vector2 position)
 	{
 		var id = CreateActor(position, (int)Config.Actors.Gem);
+		World.Set<Hitbox>(id, new(Config.ThinBox));
 		World.Set<Goal>(id);
 		World.Remove<Gravity>(id);
 		return id;
@@ -122,7 +124,7 @@ internal class Factory(World World)
 		World.Set<Sprite>(id, new(sprite));
 		World.Set<Position>(id, new(position));
 		World.Set<Velocity>(id, new(Vector2.Zero));
-		World.Set<Hitbox>(id, new(Config.UnitSize));
+		World.Set<Hitbox>(id, new(Config.StandardBox));
 		World.Set<Gravity>(id);
 		World.Set<Active>(id);
 		return id;

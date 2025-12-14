@@ -22,8 +22,8 @@ internal class Collision(World world) : System(world)
 					continue;
 				}
 
-				var a = new Rect(position, World.Get<Hitbox>(id).Value);
-				var b = new Rect(cell, Config.UnitSize);
+				var a = World.Get<Hitbox>(id).Value.Translate(position);
+				var b = Config.StandardBox.Translate(cell);
 
 				// No collision if tile is non-overlapping.
 				if (!a.Overlaps(b, out var pushout))

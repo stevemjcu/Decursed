@@ -27,8 +27,8 @@ internal class Stacking(World world) : System(world)
 				var position0 = World.Get<Position>(id0).Value;
 				var position1 = World.Get<Position>(id1).Value;
 
-				var rect0 = new Rect(position0, World.Get<Hitbox>(id0).Value);
-				var rect1 = new Rect(position1, World.Get<Hitbox>(id1).Value);
+				var rect0 = World.Get<Hitbox>(id0).Value.Translate(position0);
+				var rect1 = World.Get<Hitbox>(id1).Value.Translate(position1);
 
 				// No collision if actors are non-overlapping or pushout is not upwards.
 				if (!rect0.Overlaps(rect1, out var pushout) || pushout.Y >= 0)
