@@ -1,4 +1,5 @@
 ﻿using Foster.Framework;
+using System.Numerics;
 using YetAnotherEcs;
 using static Decursed.Components;
 
@@ -46,10 +47,11 @@ internal class Stacking(World world) : System(world)
 			}
 		}
 
-		if (World.Has<Holding>(Player))
+		var view = World.View<HeldBy>(new(Player));
+		if (view.Count > 0)
 		{
-			var id = World.Get<Holding>(Player).Id;
-			World.Set(id, World.Get<Position>(Player));
+			var position = World.Get<Position>(Player).Value;
+			World.Set<Position>(view[0], new(position - new Vector2(0, 0.25f)));
 		}
 	}
 }

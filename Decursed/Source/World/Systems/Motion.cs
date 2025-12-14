@@ -14,6 +14,11 @@ internal class Motion(World world) : System(world)
 			var position = World.Get<Position>(id).Value;
 			var velocity = World.Get<Velocity>(id).Value;
 
+			if (World.Has<Grounded>(id))
+			{
+				velocity.X *= 0.75f;
+			}
+
 			if (World.Has<Gravity>(id))
 			{
 				velocity.Y += Config.Gravity * time.Delta;

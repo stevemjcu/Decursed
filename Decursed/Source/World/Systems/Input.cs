@@ -15,15 +15,18 @@ internal class Input(World World, Controls Controls) : System(World)
 	{
 		if (Controls.Interact.Pressed)
 		{
-			if (World.TryGet<Holding>(Player, out var value))
+			var view = World.View<HeldBy>(new(Player));
+			if (view.Count > 0)
 			{
-				World.Remove<Holding>(Player);
-				World.Set<Velocity>(value.Id);
+				World.Set(view[0], World.Get<Velocity>(Player));
+				World.Remove<HeldBy>(view[0]);
 			}
-			else if (TryGetItem(Player, out var id))
+			else if (World.Has<Grounded>(Player))
 			{
-				World.Set<Holding>(Player, new(id));
-				World.Remove<Velocity>(id);
+				if (TryGetOverlappingItem(Player, out var id))
+				{
+					World.Set<HeldBy>(id, new(Player));
+				}
 			}
 		}
 
@@ -32,7 +35,7 @@ internal class Input(World World, Controls Controls) : System(World)
 
 		if (Controls.Jump.Pressed && World.Has<Grounded>(Player))
 		{
-			JumpFrame = 3;
+			JumpFrame = Config.JumpFrames;
 		}
 
 		if (JumpFrame-- > 0)
@@ -43,7 +46,7 @@ internal class Input(World World, Controls Controls) : System(World)
 		World.Set<Velocity>(Player, new(velocity));
 	}
 
-	private bool TryGetItem(int id0, out int id1)
+	private bool TryGetOverlappingItem(int id0, out int id1)
 	{
 		if (!TryGetClosestItem(id0, out id1))
 		{
