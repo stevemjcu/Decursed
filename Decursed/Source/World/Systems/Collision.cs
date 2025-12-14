@@ -39,12 +39,19 @@ internal class Collision(World world) : System(world)
 					continue;
 				}
 
-				if (pushout.Y < 0 && World.Has<Velocity>(id))
+				if (World.Has<Velocity>(id))
 				{
-					var velocity = World.Get<Velocity>(id).Value;
-					World.Set<Velocity>(id, new(velocity with { Y = 0 }));
-					World.Set<Grounded>(id);
-					World.Remove<Falling>(id);
+					if (pushout.Y != 0)
+					{
+						var velocity = World.Get<Velocity>(id).Value;
+						World.Set<Velocity>(id, new(velocity with { Y = 0 }));
+					}
+
+					if (pushout.Y < 0)
+					{
+						World.Remove<Falling>(id);
+						World.Set<Grounded>(id);
+					}
 				}
 
 				World.Set<Position>(id, new(position + pushout));

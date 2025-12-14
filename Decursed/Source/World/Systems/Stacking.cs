@@ -38,8 +38,9 @@ internal class Stacking(World world) : System(world)
 
 				var velocity = World.Get<Velocity>(id0).Value;
 				World.Set<Velocity>(id0, new(velocity with { Y = 0 }));
-				World.Set<Grounded>(id0);
+
 				World.Remove<Falling>(id0);
+				World.Set<Grounded>(id0);
 
 				World.Set<Position>(id0, new(position0 + pushout));
 			}

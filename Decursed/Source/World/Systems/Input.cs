@@ -6,6 +6,8 @@ namespace Decursed;
 
 internal class Input(World World, Controls Controls) : System(World)
 {
+	private int JumpFrame = 0;
+
 	public override void Update(Time time)
 	{
 		var move = Controls.Move.Value.X;
@@ -16,7 +18,12 @@ internal class Input(World World, Controls Controls) : System(World)
 
 		if (jump && World.Has<Grounded>(Player))
 		{
-			velocity.Y = Config.JumpImpulse;
+			JumpFrame = 3;
+		}
+
+		if (JumpFrame-- > 0)
+		{
+			velocity.Y = Config.JumpSpeed;
 		}
 
 		World.Set<Velocity>(Player, new(velocity));

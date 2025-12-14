@@ -20,10 +20,10 @@ internal static class Config
 	public readonly static Point2 LevelSize = NativeResolution / TileResolution;
 
 	public readonly static Rect StandardBox = new(0, 0, 1, 1);
-	public readonly static Rect ThinBox = new(0.125f, 0, 0.75f, 1);
+	public readonly static Rect ThinBox = new(0.125f, 0.125f, 0.75f, 0.875f);
 
 	public const float MoveSpeed = 7f;
-	public const float JumpImpulse = -30;
+	public const float JumpSpeed = -25;
 	public const float Gravity = 120;
 
 	// FIXME: Higher speeds cause tunneling
