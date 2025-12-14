@@ -25,6 +25,6 @@ internal class Camera(Point2 windowResolution, Point2 nativeResolution, Vector2 
 
 	public Point2 WorldToNative(Vector2 position)
 	{
-		return (Point2)((position - Position) / Size * NativeResolution);
+		return ((position - Position) / Size * NativeResolution).RoundToPoint2();
 	}
 }
