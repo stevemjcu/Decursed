@@ -6,6 +6,9 @@ namespace Decursed;
 
 internal class Render(World World, Graphics Graphics) : System(World)
 {
+	private static Filter Drawable = new Filter()
+		.Include<Sprite, Position, Active>();
+
 	public override void Update(Time time)
 	{
 		for (var x = 0; x < Tilemap.GetLength(0); x++)
@@ -26,11 +29,10 @@ internal class Render(World World, Graphics Graphics) : System(World)
 			}
 		}
 
-		foreach (var it in World
-			.View(new Filter().Include<Sprite, Position, Active>()))
+		foreach (var it in World.View(Drawable))
 		{
-			var sprite = World.Get<Sprite>(it).Value;
-			var position = World.Get<Position>(it).Value;
+			var sprite = it.Get<Sprite>().Value;
+			var position = it.Get<Position>().Value;
 
 			Graphics.Batcher.Image
 			(

@@ -1,5 +1,4 @@
 ﻿using Foster.Framework;
-using System.Numerics;
 using YetAnotherEcs;
 using static Decursed.Components;
 
@@ -15,21 +14,21 @@ internal class Stacking(World world) : System(world)
 
 	public override void Update(Time time)
 	{
-		foreach (var id0 in World.View(Actors))
+		foreach (var a in World.View(Actors))
 		{
-			foreach (var id1 in World.View(Platforms))
+			foreach (var b in World.View(Platforms))
 			{
 				// No collision if actors are the same.
-				if (id0 == id1)
+				if (a == b)
 				{
 					continue;
 				}
 
-				var position0 = World.Get<Position>(id0).Value;
-				var position1 = World.Get<Position>(id1).Value;
+				var position0 = a.Get<Position>().Value;
+				var position1 = b.Get<Position>().Value;
 
-				var rect0 = World.Get<Hitbox>(id0).Value.Translate(position0);
-				var rect1 = World.Get<Hitbox>(id1).Value.Translate(position1);
+				var rect0 = a.Get<Hitbox>().Value.Translate(position0);
+				var rect1 = b.Get<Hitbox>().Value.Translate(position1);
 
 				// No collision if actors are non-overlapping or pushout is not upwards.
 				if (!rect0.Overlaps(rect1, out var pushout) || pushout.Y >= 0)
@@ -37,21 +36,18 @@ internal class Stacking(World world) : System(world)
 					continue;
 				}
 
-				var velocity = World.Get<Velocity>(id0).Value;
-				World.Set<Velocity>(id0, new(velocity with { Y = 0 }));
-
-				World.Remove<Falling>(id0);
-				World.Set<Grounded>(id0);
-
-				World.Set<Position>(id0, new(position0 + pushout));
+				var velocity = a.Get<Velocity>().Value;
+				a.Set<Velocity>(new(velocity with { Y = 0 }));
+				a.Set<Position>(new(position0 + pushout));
+				a.Remove<Falling>().Set<Grounded>();
 			}
 		}
 
 		var view = World.View<HeldBy>(new(Player));
-		if (view.Count > 0)
+		if (view.Count > 0 && view[0] is var item)
 		{
-			var position = World.Get<Position>(Player).Value;
-			World.Set<Position>(view[0], new(position - new Vector2(0, 0.25f)));
+			var position = Player.Get<Position>().Value;
+			item.Set<Position>(new(position - Config.HoldOffset));
 		}
 	}
 }

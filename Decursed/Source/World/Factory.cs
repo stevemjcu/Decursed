@@ -16,31 +16,31 @@ internal class Factory(World World)
 		CreateRootInstance();
 	}
 
-	public int CreateTemplate(string path)
+	public Entity CreateTemplate(string path)
 	{
 		var tag = char.Parse(Path.GetFileNameWithoutExtension(path));
 		var layout = Utility.ParseCsv(path, Config.LevelSize);
 
-		var id = World.Create();
-		World.Set<Tag>(id, new(tag));
-		World.Set<Layout>(id, new(layout));
+		var template = World.Create();
+		template.Set<Tag>(new(tag));
+		template.Set<Layout>(new(layout));
 
-		return id;
+		return template;
 	}
 
-	public int CreateRootInstance()
+	public Entity CreateRootInstance()
 	{
 		return CreateInstance(World.View(new Tag('0'))[0]);
 	}
 
-	public int CreateInstance(int template, int entrance = -1)
+	public Entity CreateInstance(Entity template, Entity? entrance = null)
 	{
-		var layout = World.Get<Layout>(template).Value;
+		var layout = template.Get<Layout>().Value;
 		var tilemap = new int[layout.GetLength(0), layout.GetLength(1)];
 
-		var id = World.Create();
-		World.Set<InstanceOf>(id, new(template));
-		World.Set<Tilemap>(id, new(tilemap));
+		var instance = World.Create();
+		instance.Set<InstanceOf>(new(template));
+		instance.Set<Tilemap>(new(tilemap));
 
 		for (var x = 0; x < layout.GetLength(0); x++)
 		{
@@ -58,7 +58,7 @@ internal class Factory(World World)
 
 				var entity = archetype switch
 				{
-					'R' or 'r' => entrance == -1 ? CreatePlayer(position) : CreateRift(position, entrance),
+					'R' or 'r' => entrance is null ? CreatePlayer(position) : CreateRift(position, (Entity)entrance),
 					'C' or 'c' => CreateChest(position, World.View(new Tag(tag))[0]),
 					'B' or 'b' => CreateBox(position),
 					'K' or 'k' => CreateKey(position),
@@ -66,71 +66,71 @@ internal class Factory(World World)
 					_ => throw new Exception($"Invalid entity: {archetype}"),
 				};
 
-				World.Set<ChildOf>(entity, new(id));
+				entity.Set<ChildOf>(new(instance));
 			}
 		}
 
-		return id;
+		return instance;
 	}
 
-	private int CreatePlayer(Vector2 position)
+	private Entity CreatePlayer(Vector2 position)
 	{
-		var id = CreateActor(position, (int)Config.Actors.Player);
-		World.Set<Receiver>(id);
-		World.Set<Hitbox>(id, new(Config.ThinBox));
-		return id;
+		var entity = CreateActor(position, (int)Config.Actors.Player);
+		entity.Set<Receiver>();
+		entity.Set<Hitbox>(new(Config.ThinBox));
+		return entity;
 	}
 
-	private int CreateRift(Vector2 position, int entrance)
+	private Entity CreateRift(Vector2 position, Entity entrance)
 	{
-		var id = CreateActor(position);
-		World.Set<ExitFor>(id, new(entrance));
-		return id;
+		var entity = CreateActor(position);
+		entity.Set<ExitFor>(new(entrance));
+		return entity;
 	}
 
-	private int CreateChest(Vector2 position, int template)
+	private Entity CreateChest(Vector2 position, Entity template)
 	{
-		var id = CreateActor(position, (int)Config.Actors.ChestOpen);
-		World.Set<EntranceFor>(id, new(template));
-		World.Set<Portable>(id);
-		return id;
+		var entity = CreateActor(position, (int)Config.Actors.ChestOpen);
+		entity.Set<EntranceFor>(new(template));
+		entity.Set<Portable>();
+		return entity;
 	}
 
-	private int CreateBox(Vector2 position)
+	private Entity CreateBox(Vector2 position)
 	{
-		var id = CreateActor(position, (int)Config.Actors.Box);
-		World.Set<Platform>(id);
-		World.Set<Portable>(id);
-		return id;
+		var entity = CreateActor(position, (int)Config.Actors.Box);
+		entity.Set<Platform>();
+		entity.Set<Portable>();
+		return entity;
 	}
 
-	private int CreateKey(Vector2 position)
+	private Entity CreateKey(Vector2 position)
 	{
-		var id = CreateActor(position, (int)Config.Actors.Key);
-		World.Set<Unlock>(id);
-		World.Set<Portable>(id);
-		return id;
+		var entity = CreateActor(position, (int)Config.Actors.Key);
+		entity.Set<Unlock>();
+		entity.Set<Portable>();
+		return entity;
 	}
 
-	private int CreateGem(Vector2 position)
+	private Entity CreateGem(Vector2 position)
 	{
-		var id = CreateActor(position, (int)Config.Actors.Gem);
-		World.Set<Hitbox>(id, new(Config.ThinBox));
-		World.Set<Goal>(id);
-		World.Remove<Velocity>(id);
-		World.Remove<Gravity>(id);
-		return id;
+		var entity = CreateActor(position, (int)Config.Actors.Gem);
+		entity.Set<Hitbox>(new(Config.ThinBox));
+		entity.Set<Goal>();
+		entity.Remove<Velocity>();
+		entity.Remove<Gravity>();
+		return entity;
 	}
 
-	private int CreateActor(Vector2 position, int sprite = 0)
+	private Entity CreateActor(Vector2 position, int sprite = 0)
 	{
-		var id = World.Create();
-		World.Set<Sprite>(id, new(sprite));
-		World.Set<Position>(id, new(position));
-		World.Set<Velocity>(id, new(Vector2.Zero));
-		World.Set<Hitbox>(id, new(Config.StandardBox));
-		World.Set<Gravity>(id);
-		World.Set<Active>(id);
-		return id;
+		var entity = World.Create();
+		entity.Set<Sprite>(new(sprite));
+		entity.Set<Position>(new(position));
+		entity.Set<Velocity>(new(Vector2.Zero));
+		entity.Set<Hitbox>(new(Config.StandardBox));
+		entity.Set<Gravity>();
+		entity.Set<Active>();
+		return entity;
 	}
 }

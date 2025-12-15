@@ -58,17 +58,17 @@ internal static class Components
 	public record struct Active();
 
 	// Is an entrance for a template.
-	[Indexed] public record struct EntranceFor(int Id);
+	[Indexed] public record struct EntranceFor(Entity Value);
 
 	// Is an exit for an entrance.
-	[Indexed] public record struct ExitFor(int Id);
+	[Indexed] public record struct ExitFor(Entity Value);
 
 	// Is an instance of a template.
-	[Indexed] public record struct InstanceOf(int Id);
+	[Indexed] public record struct InstanceOf(Entity Value);
 
 	// Is a child of an entity.
-	[Indexed] public record struct ChildOf(int Id);
+	[Indexed] public record struct ChildOf(Entity Value);
 
 	// Is held by an entity.
-	[Indexed] public record struct HeldBy(int Id);
+	[Indexed] public record struct HeldBy(Entity Value);
 }

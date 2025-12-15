@@ -6,15 +6,17 @@ namespace Decursed;
 
 internal class Collision(World world) : System(world)
 {
+	private static Filter Bodies = new Filter()
+		.Include<Position, Hitbox, Active>();
+
 	public override void Update(Time _)
 	{
-		foreach (var id in World
-			.View(new Filter().Include<Position, Hitbox, Active>()))
+		foreach (var it in World.View(Bodies))
 		{
-			foreach (var it in Config.Directions)
+			foreach (var dir in Config.Directions)
 			{
-				var position = World.Get<Position>(id).Value;
-				var cell = position.RoundToPoint2() + it;
+				var position = it.Get<Position>().Value;
+				var cell = position.RoundToPoint2() + dir;
 
 				// No collision if tile is empty.
 				if (Tilemap[cell.X, cell.Y] == 0)
@@ -22,7 +24,7 @@ internal class Collision(World world) : System(world)
 					continue;
 				}
 
-				var a = World.Get<Hitbox>(id).Value.Translate(position);
+				var a = it.Get<Hitbox>().Value.Translate(position);
 				var b = Config.StandardBox.Translate(cell);
 
 				// No collision if tile is non-overlapping.
@@ -39,24 +41,23 @@ internal class Collision(World world) : System(world)
 					continue;
 				}
 
-				if (World.Has<Velocity>(id))
+				if (it.Has<Velocity>())
 				{
-					var velocity = World.Get<Velocity>(id).Value;
+					var velocity = it.Get<Velocity>().Value;
 
 					if (pushout.Y > 0 && velocity.Y < 0)
 					{
-						World.Set<Velocity>(id, new(velocity with { Y = 0 }));
+						it.Set<Velocity>(new(velocity with { Y = 0 }));
 					}
 
 					if (pushout.Y < 0 && velocity.Y > 0)
 					{
-						World.Set<Velocity>(id, new(velocity with { Y = 0 }));
-						World.Remove<Falling>(id);
-						World.Set<Grounded>(id);
+						it.Set<Velocity>(new(velocity with { Y = 0 }));
+						it.Remove<Falling>().Set<Grounded>();
 					}
 				}
 
-				World.Set<Position>(id, new(position + pushout));
+				it.Set<Position>(new(position + pushout));
 			}
 		}
 	}

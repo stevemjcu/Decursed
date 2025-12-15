@@ -23,15 +23,20 @@ internal static class Config
 	public readonly static Rect StandardBox = new(0, 0, 1, 1);
 	public readonly static Rect ThinBox = new(0.125f, 0.125f, 0.75f, 0.875f);
 
-	public const float MoveSpeed = 8f;
+	public const float MoveSpeed = 8;
 	public const float JumpSpeed = -25;
 	public const int JumpFrames = 5;
 	public const int ReducedJumpFrames = 3;
+	public const float ThrowSpeed = 12;
 	public const float Gravity = 120;
 
 	// FIXME: Higher speeds cause tunneling
 	// 30 tiles/sec = 0.5 tiles/frame
 	public const float TerminalSpeed = 20;
+
+	public readonly static Vector2 MinVelocity = new(-TerminalSpeed);
+	public readonly static Vector2 MaxVelocity = new(+TerminalSpeed);
+	public readonly static Vector2 HoldOffset = new(0, 0.25f);
 
 	public static Point2 WindowResolution => NativeResolution * WindowScale;
 

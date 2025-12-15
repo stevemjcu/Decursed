@@ -6,38 +6,37 @@ namespace Decursed;
 
 internal class Motion(World world) : System(world)
 {
+	private static Filter Movable = new Filter()
+		.Include<Position, Velocity, Active>();
+
 	public override void Update(Time time)
 	{
-		foreach (var id in World
-			.View(new Filter().Include<Position, Velocity, Active>()))
+		foreach (var it in World.View(Movable))
 		{
-			var position = World.Get<Position>(id).Value;
-			var velocity = World.Get<Velocity>(id).Value;
+			var position = it.Get<Position>().Value;
+			var velocity = it.Get<Velocity>().Value;
 
-			if (World.Has<Grounded>(id))
+			if (it.Has<Grounded>())
 			{
 				velocity.X *= 0.75f;
 			}
 
-			if (World.Has<Gravity>(id))
+			if (it.Has<Gravity>())
 			{
 				velocity.Y += Config.Gravity * time.Delta;
-				World.Remove<Grounded>(id);
+				it.Remove<Grounded>();
 
 				if (velocity.Y > 0)
 				{
-					World.Set<Falling>(id);
+					it.Set<Falling>();
 				}
 			}
 
-			velocity = velocity.Clamp(
-				new(-Config.TerminalSpeed, -Config.TerminalSpeed),
-				new(+Config.TerminalSpeed, +Config.TerminalSpeed));
-
+			velocity = velocity.Clamp(Config.MinVelocity, Config.MaxVelocity);
 			position += velocity * time.Delta;
 
-			World.Set<Position>(id, new(position));
-			World.Set<Velocity>(id, new(velocity));
+			it.Set<Position>(new(position));
+			it.Set<Velocity>(new(velocity));
 		}
 	}
 }

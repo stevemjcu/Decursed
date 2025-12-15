@@ -17,26 +17,28 @@ internal class Input(World World, Controls Controls) : System(World)
 
 		if (Controls.Interact.Pressed)
 		{
-			if (view.Count > 0)
+			if (view.Count > 0 && view[0] is var item)
 			{
-				World.Set(view[0], World.Get<Velocity>(Player));
-				World.Remove<HeldBy>(view[0]);
+				item.Set(Player.Get<Velocity>());
+				item.Remove<HeldBy>();
 			}
-			else if (World.Has<Grounded>(Player))
+			else if (Player.Has<Grounded>())
 			{
-				if (TryGetOverlappingItem(Player, out var id))
+				if (TryGetOverlappingItem(Player, out item))
 				{
-					World.Set<HeldBy>(id, new(Player));
+					item.Set<HeldBy>(new(Player));
 				}
 			}
 		}
 
-		var velocity = World.Get<Velocity>(Player).Value;
+		var velocity = Player.Get<Velocity>().Value;
 		velocity.X = Controls.Move.Value.X * Config.MoveSpeed;
 
-		if (Controls.Jump.Pressed && World.Has<Grounded>(Player))
+		if (Controls.Jump.Pressed && Player.Has<Grounded>())
 		{
-			JumpFrame = view.Count == 0 ? Config.JumpFrames : Config.ReducedJumpFrames;
+			JumpFrame = view.Count == 0
+				? Config.JumpFrames
+				: Config.ReducedJumpFrames;
 		}
 
 		if (JumpFrame-- > 0)
@@ -44,38 +46,39 @@ internal class Input(World World, Controls Controls) : System(World)
 			velocity.Y = Config.JumpSpeed;
 		}
 
-		World.Set<Velocity>(Player, new(velocity));
+		Player.Set<Velocity>(new(velocity));
 	}
 
-	private bool TryGetOverlappingItem(int id0, out int id1)
+	private bool TryGetOverlappingItem(Entity a, out Entity b)
 	{
-		if (!TryGetClosestItem(id0, out id1))
+		if (!TryGetClosestItem(a, out b))
 		{
 			return false;
 		}
 
-		var position0 = World.Get<Position>(id0).Value;
-		var position1 = World.Get<Position>(id1).Value;
+		var position0 = a.Get<Position>().Value;
+		var position1 = b.Get<Position>().Value;
 
-		var rect0 = World.Get<Hitbox>(id0).Value.Translate(position0);
-		var rect1 = World.Get<Hitbox>(id1).Value.Translate(position1);
+		var rect0 = a.Get<Hitbox>().Value.Translate(position0);
+		var rect1 = b.Get<Hitbox>().Value.Translate(position1);
 
 		return rect0.Overlaps(rect1);
 	}
 
-	private bool TryGetClosestItem(int id0, out int id1)
+	private bool TryGetClosestItem(Entity a, out Entity b)
 	{
-		var position = World.Get<Position>(id0).Value;
-		var best = (Id: -1, Distance: float.MaxValue);
+		var position = a.Get<Position>().Value;
+		var best = (Entity: Entity.Tombstone, Distance: float.MaxValue);
 
 		foreach (var it in World.View(Items))
 		{
-			if (id0 == it)
+			if (a == it)
 			{
 				continue;
 			}
 
-			var distance = (World.Get<Position>(it).Value - position).Length();
+			var displacement = it.Get<Position>().Value - position;
+			var distance = displacement.Length();
 
 			if (distance < best.Distance)
 			{
@@ -83,6 +86,7 @@ internal class Input(World World, Controls Controls) : System(World)
 			}
 		}
 
-		return (id1 = best.Id) != -1;
+		b = best.Entity;
+		return b != Entity.Tombstone;
 	}
 }
