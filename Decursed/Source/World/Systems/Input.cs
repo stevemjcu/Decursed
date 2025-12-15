@@ -6,8 +6,7 @@ namespace Decursed;
 
 internal class Input(World World, Controls Controls) : System(World)
 {
-	private static Filter Items = new Filter()
-		.Include<Position, Hitbox, Portable, Active>();
+	private static Filter Items = new Filter().Include<Position, Hitbox, Portable, Active>();
 
 	private int JumpFrame = 0;
 
@@ -22,12 +21,10 @@ internal class Input(World World, Controls Controls) : System(World)
 				item.Set(Player.Get<Velocity>());
 				item.Remove<HeldBy>();
 			}
-			else if (Player.Has<Grounded>())
+			else if (Player.Has<Grounded>() && TryGetOverlappingItem(Player, out item))
 			{
-				if (TryGetOverlappingItem(Player, out item))
-				{
-					item.Set<HeldBy>(new(Player));
-				}
+				item.Set<HeldBy>(new(Player));
+				item.Remove<Grounded>();
 			}
 		}
 
@@ -36,14 +33,12 @@ internal class Input(World World, Controls Controls) : System(World)
 
 		if (Controls.Jump.Pressed && Player.Has<Grounded>())
 		{
-			JumpFrame = view.Count == 0
-				? Config.JumpFrames
-				: Config.ReducedJumpFrames;
+			JumpFrame = view.Count == 0 ? Config.JumpFrames : Config.ReducedJumpFrames;
 		}
 
 		if (JumpFrame-- > 0)
 		{
-			velocity.Y = Config.JumpSpeed;
+			velocity.Y = -Config.JumpSpeed;
 		}
 
 		Player.Set<Velocity>(new(velocity));
@@ -68,7 +63,7 @@ internal class Input(World World, Controls Controls) : System(World)
 	private bool TryGetClosestItem(Entity a, out Entity b)
 	{
 		var position = a.Get<Position>().Value;
-		var best = (Entity: Entity.Tombstone, Distance: float.MaxValue);
+		var best = (Entity: (Entity?)null, Distance: float.MaxValue);
 
 		foreach (var it in World.View(Items))
 		{
@@ -86,7 +81,7 @@ internal class Input(World World, Controls Controls) : System(World)
 			}
 		}
 
-		b = best.Entity;
-		return b != Entity.Tombstone;
+		b = best.Entity ?? default;
+		return best.Entity is not null;
 	}
 }

@@ -18,9 +18,6 @@ internal static class Components
 	// Can be drawn.
 	public record struct Sprite(int Value);
 
-	// Can be animated.
-	public record struct Animation(int Index, int Frame);
-
 	// Can be positioned.
 	public record struct Position(Vector2 Value);
 
@@ -57,11 +54,11 @@ internal static class Components
 	// Can be operated on.
 	public record struct Active();
 
-	// Is an entrance for a template.
-	[Indexed] public record struct EntranceFor(Entity Value);
+	// Is an entrance to a template.
+	[Indexed] public record struct EntranceTo(Entity Value);
 
-	// Is an exit for an entrance.
-	[Indexed] public record struct ExitFor(Entity Value);
+	// Is an exit to an entrance.
+	[Indexed] public record struct ExitTo(Entity Value);
 
 	// Is an instance of a template.
 	[Indexed] public record struct InstanceOf(Entity Value);

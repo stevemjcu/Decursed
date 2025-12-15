@@ -3,7 +3,7 @@ using YetAnotherEcs;
 
 namespace Decursed;
 
-internal class Level : IScene, IDisposable
+internal class Level : IScene
 {
 	private readonly World World = new();
 	private readonly Factory Factory;
@@ -13,6 +13,9 @@ internal class Level : IScene, IDisposable
 
 	public Level(string path, Game game)
 	{
+		// TODO: Make factory a startup system?
+		// Or give all systems a startup/update/render phase?
+		// Should System implement IScene?
 		Factory = new(World);
 		Factory.LoadLevel(path);
 
@@ -21,7 +24,8 @@ internal class Level : IScene, IDisposable
 			new Input(World, game.Controls),
 			new Motion(World),
 			new Collision(World),
-			new Stacking(World)
+			new Stacking(World),
+			new Holding(World),
 		];
 
 		RenderSystems =

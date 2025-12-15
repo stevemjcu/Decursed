@@ -6,8 +6,7 @@ namespace Decursed;
 
 internal class Collision(World world) : System(world)
 {
-	private static Filter Bodies = new Filter()
-		.Include<Position, Hitbox, Active>();
+	private static Filter Bodies = new Filter().Include<Position, Hitbox, Active>();
 
 	public override void Update(Time _)
 	{
@@ -27,7 +26,7 @@ internal class Collision(World world) : System(world)
 				var a = it.Get<Hitbox>().Value.Translate(position);
 				var b = Config.StandardBox.Translate(cell);
 
-				// No collision if tile is non-overlapping.
+				// No collision if tile is not overlapping.
 				if (!a.Overlaps(b, out var pushout))
 				{
 					continue;
@@ -35,7 +34,7 @@ internal class Collision(World world) : System(world)
 
 				cell += pushout.Normalized().RoundToPoint2();
 
-				// No collision if projected tile is non-empty.
+				// No collision if projected tile is not empty.
 				if (Tilemap[cell.X, cell.Y] != 0)
 				{
 					continue;
@@ -53,7 +52,8 @@ internal class Collision(World world) : System(world)
 					if (pushout.Y < 0 && velocity.Y > 0)
 					{
 						it.Set<Velocity>(new(velocity with { Y = 0 }));
-						it.Remove<Falling>().Set<Grounded>();
+						it.Remove<Falling>();
+						it.Set<Grounded>();
 					}
 				}
 

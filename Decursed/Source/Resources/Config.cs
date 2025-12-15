@@ -12,7 +12,6 @@ internal static class Config
 	public readonly static string TexturePath = Path.Combine(ContentPath, "Texture");
 
 	public const int TargetFps = 60;
-	public readonly static TimeSpan TargetFrameTime = TimeSpan.FromSeconds(1) / TargetFps;
 	public const int WindowScale = 5;
 
 	public readonly static Point2 NativeResolution = new(128, 128);
@@ -23,12 +22,12 @@ internal static class Config
 	public readonly static Rect StandardBox = new(0, 0, 1, 1);
 	public readonly static Rect ThinBox = new(0.125f, 0.125f, 0.75f, 0.875f);
 
-	public const float MoveSpeed = 8;
-	public const float JumpSpeed = -25;
-	public const int JumpFrames = 5;
-	public const int ReducedJumpFrames = 3;
+	public const float MoveSpeed = 7;
+	public const float JumpSpeed = 20.5f;
+	public const int JumpFrames = 4;
+	public const int ReducedJumpFrames = 1;
 	public const float ThrowSpeed = 12;
-	public const float Gravity = 120;
+	public const float Gravity = 160;
 
 	// FIXME: Higher speeds cause tunneling
 	// 30 tiles/sec = 0.5 tiles/frame
@@ -36,9 +35,11 @@ internal static class Config
 
 	public readonly static Vector2 MinVelocity = new(-TerminalSpeed);
 	public readonly static Vector2 MaxVelocity = new(+TerminalSpeed);
-	public readonly static Vector2 HoldOffset = new(0, 0.25f);
+	public readonly static Vector2 HoldOffset = new(0, -0.25f);
 
 	public static Point2 WindowResolution => NativeResolution * WindowScale;
+
+	public static TimeSpan TargetFrameTime => TimeSpan.FromSeconds(1) / TargetFps;
 
 	public enum Spritesheet { Actors, Tiles };
 

@@ -84,14 +84,14 @@ internal class Factory(World World)
 	private Entity CreateRift(Vector2 position, Entity entrance)
 	{
 		var entity = CreateActor(position);
-		entity.Set<ExitFor>(new(entrance));
+		entity.Set<ExitTo>(new(entrance));
 		return entity;
 	}
 
 	private Entity CreateChest(Vector2 position, Entity template)
 	{
 		var entity = CreateActor(position, (int)Config.Actors.ChestOpen);
-		entity.Set<EntranceFor>(new(template));
+		entity.Set<EntranceTo>(new(template));
 		entity.Set<Portable>();
 		return entity;
 	}

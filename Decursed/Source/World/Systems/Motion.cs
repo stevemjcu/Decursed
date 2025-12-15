@@ -6,8 +6,7 @@ namespace Decursed;
 
 internal class Motion(World world) : System(world)
 {
-	private static Filter Movable = new Filter()
-		.Include<Position, Velocity, Active>();
+	private static Filter Movable = new Filter().Include<Position, Velocity, Active>();
 
 	public override void Update(Time time)
 	{
@@ -16,7 +15,7 @@ internal class Motion(World world) : System(world)
 			var position = it.Get<Position>().Value;
 			var velocity = it.Get<Velocity>().Value;
 
-			if (it.Has<Grounded>())
+			if (it.Has<Grounded>() && it != Player)
 			{
 				velocity.X *= 0.75f;
 			}

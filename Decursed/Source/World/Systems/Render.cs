@@ -6,8 +6,7 @@ namespace Decursed;
 
 internal class Render(World World, Graphics Graphics) : System(World)
 {
-	private static Filter Drawable = new Filter()
-		.Include<Sprite, Position, Active>();
+	private static Filter Drawable = new Filter().Include<Sprite, Position, Active>();
 
 	public override void Update(Time time)
 	{
