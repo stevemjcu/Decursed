@@ -81,6 +81,8 @@ internal class Game : App, IDisposable
 		Graphics.Batcher.PopMatrix();
 		Graphics.Batcher.PopSampler();
 
+		Scenes.Peek().Overlay(Time);
+
 		Graphics.Batcher.Render(Window);
 		Graphics.Batcher.Clear();
 	}

@@ -27,7 +27,7 @@ internal class Stacking(World world) : System(world)
 			// TODO: Sort by Y coordinate?
 			foreach (var a in World.View(Platforms))
 			{
-				// No collision if actor is platform
+				// No collision if actor is this platform
 				if (b == a)
 				{
 					continue;

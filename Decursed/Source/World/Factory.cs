@@ -30,7 +30,7 @@ internal class Factory(World World)
 
 	public Entity CreateRootInstance()
 	{
-		return CreateInstance(World.View(new Tag('0'))[0]);
+		return CreateInstance(World.View<Tag>(new('0'))[0]);
 	}
 
 	public Entity CreateInstance(Entity template, Entity? entrance = null)
@@ -59,7 +59,7 @@ internal class Factory(World World)
 				var entity = archetype switch
 				{
 					'R' or 'r' => entrance is null ? CreatePlayer(position) : CreateRift(position, (Entity)entrance),
-					'C' or 'c' => CreateChest(position, World.View(new Tag(tag))[0]),
+					'C' or 'c' => CreateChest(position, World.View<Tag>(new(tag))[0]),
 					'B' or 'b' => CreateBox(position),
 					'K' or 'k' => CreateKey(position),
 					'G' or 'g' => CreateGem(position),

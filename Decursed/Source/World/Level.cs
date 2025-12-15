@@ -10,6 +10,7 @@ internal class Level : IScene
 
 	private readonly List<System> UpdateSystems;
 	private readonly List<System> RenderSystems;
+	private readonly List<System> OverlaySystems;
 
 	public Level(string path, Game game)
 	{
@@ -28,10 +29,8 @@ internal class Level : IScene
 			new Holding(World),
 		];
 
-		RenderSystems =
-		[
-			new Render(World, game.Graphics),
-		];
+		RenderSystems = [new Render(World, game.Graphics)];
+		OverlaySystems = [new Debug(World, game.Graphics)];
 	}
 
 	void IDisposable.Dispose() { }
@@ -47,6 +46,14 @@ internal class Level : IScene
 	public void Render(Time time)
 	{
 		foreach (var it in RenderSystems)
+		{
+			it.Update(time);
+		}
+	}
+
+	public void Overlay(Time time)
+	{
+		foreach (var it in OverlaySystems)
 		{
 			it.Update(time);
 		}
