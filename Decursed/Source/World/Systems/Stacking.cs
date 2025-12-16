@@ -15,7 +15,7 @@ internal class Stacking(World world) : System(world)
 	public override void Update(Time _)
 	{
 		var repeat = true;
-		while (repeat)
+		for (var i = 0; repeat && i < 10; i++)
 		{
 			repeat = false;
 			foreach (var b in World.View(Actors))
@@ -48,7 +48,7 @@ internal class Stacking(World world) : System(world)
 					b.Remove<Falling>();
 					b.Set<Grounded>();
 
-					// If a collision occurred, another may occur after projection.
+					// If collision occurred, another may after projection.
 					repeat = true;
 				}
 			}
