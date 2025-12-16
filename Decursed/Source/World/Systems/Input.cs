@@ -18,12 +18,13 @@ internal class Input(World World, Controls Controls) : System(World)
 		{
 			if (view.Count > 0 && view[0] is var item)
 			{
-				item.Set(Player.Get<Velocity>());
 				item.Remove<HeldBy>();
+				item.Set(Player.Get<Velocity>());
 			}
 			else if (Player.Has<Grounded>() && TryGetOverlappingItem(Player, out item))
 			{
 				item.Set<HeldBy>(new(Player));
+				item.Remove<Velocity>();
 				item.Remove<Grounded>();
 			}
 		}
