@@ -14,9 +14,6 @@ internal class Level : IScene
 
 	public Level(string path, Game game)
 	{
-		// TODO: Make factory a startup system?
-		// Or give all systems a startup/update/render phase?
-		// Should System implement IScene?
 		Factory = new(World);
 		Factory.LoadLevel(path);
 
@@ -31,8 +28,6 @@ internal class Level : IScene
 		OverlaySystems = [new Debug(World, game.Graphics)];
 	}
 
-	void IDisposable.Dispose() { }
-
 	public void Update(Time time)
 	{
 		foreach (var it in UpdateSystems)
@@ -41,7 +36,7 @@ internal class Level : IScene
 		}
 	}
 
-	public void Render(Time time)
+	public void RenderToBuffer(Time time)
 	{
 		foreach (var it in RenderSystems)
 		{
@@ -49,7 +44,7 @@ internal class Level : IScene
 		}
 	}
 
-	public void Overlay(Time time)
+	public void RenderToScreen(Time time)
 	{
 		foreach (var it in OverlaySystems)
 		{

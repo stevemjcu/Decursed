@@ -67,7 +67,7 @@ internal class Game : App, IDisposable
 
 		// Render scene to buffer
 
-		Scenes.Peek().Render(Time);
+		Scenes.Peek().RenderToBuffer(Time);
 		DrawCursor();
 
 		Graphics.Batcher.Render(Graphics.Buffer);
@@ -81,7 +81,7 @@ internal class Game : App, IDisposable
 		Graphics.Batcher.PopMatrix();
 		Graphics.Batcher.PopSampler();
 
-		Scenes.Peek().Overlay(Time);
+		Scenes.Peek().RenderToScreen(Time);
 
 		Graphics.Batcher.Render(Window);
 		Graphics.Batcher.Clear();

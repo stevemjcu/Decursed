@@ -6,7 +6,9 @@ internal interface IScene : IDisposable
 {
 	public void Update(Time delta);
 
-	public void Render(Time delta);
+	public void RenderToBuffer(Time delta);
 
-	public void Overlay(Time delta);
+	public void RenderToScreen(Time delta);
+
+	void IDisposable.Dispose() { }
 }
