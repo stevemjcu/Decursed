@@ -10,6 +10,11 @@ internal class Debug(World World, Graphics Graphics) : System(World)
 
 	public override void Update(Time time)
 	{
+		if (!Config.DebugMode)
+		{
+			return;
+		}
+
 		foreach (var it in World.View(Drawable))
 		{
 			var position = it.Get<Position>().Value;
