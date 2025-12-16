@@ -18,6 +18,9 @@ internal static class Components
 	// Can be drawn.
 	public record struct Sprite(int Value);
 
+	// Is facing a direction.
+	public record struct Orientation(Point2 Value);
+
 	// Can be positioned.
 	public record struct Position(Vector2 Value);
 

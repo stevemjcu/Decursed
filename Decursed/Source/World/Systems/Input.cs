@@ -31,6 +31,15 @@ internal class Input(World World, Controls Controls) : System(World)
 		var velocity = Player.Get<Velocity>().Value;
 		velocity.X = Controls.Move.Value.X * Config.MoveSpeed;
 
+		if (Controls.Move.PressedLeft)
+		{
+			Player.Set<Orientation>(new(Config.Left));
+		}
+		else if (Controls.Move.PressedRight)
+		{
+			Player.Set<Orientation>(new(Config.Right));
+		}
+
 		if (Controls.Jump.Pressed && Player.Has<Grounded>())
 		{
 			JumpFrame = view.Count == 0 ? Config.JumpFrames : Config.ReducedJumpFrames;

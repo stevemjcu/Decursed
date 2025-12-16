@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using Foster.Framework;
+using System.Numerics;
 using YetAnotherEcs;
 using static Decursed.Components;
 
@@ -126,6 +127,7 @@ internal class Factory(World World)
 	{
 		var entity = World.Create();
 		entity.Set<Sprite>(new(sprite));
+		entity.Set<Orientation>(new(Point2.One));
 		entity.Set<Position>(new(position));
 		entity.Set<Velocity>(new(Vector2.Zero));
 		entity.Set<Hitbox>(new(Config.StandardBox));

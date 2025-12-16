@@ -20,14 +20,12 @@ internal class Level : IScene
 		Factory = new(World);
 		Factory.LoadLevel(path);
 
-		UpdateSystems =
-		[
+		UpdateSystems = [
 			new Input(World, game.Controls),
 			new Motion(World),
 			new Collision(World),
 			new Stacking(World),
-			new Holding(World),
-		];
+			new Holding(World)];
 
 		RenderSystems = [new Render(World, game.Graphics)];
 		OverlaySystems = [new Debug(World, game.Graphics)];

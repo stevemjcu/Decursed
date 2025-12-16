@@ -37,7 +37,10 @@ internal static class Config
 
 	public readonly static Vector2 MinVelocity = new(-TerminalSpeed);
 	public readonly static Vector2 MaxVelocity = new(+TerminalSpeed);
-	public readonly static Vector2 HoldOffset = new(0, -0.25f);
+	public readonly static Vector2 HoldOffset = new(0, -0.3f);
+
+	public readonly static Point2 Left = new(-1, 1);
+	public readonly static Point2 Right = new(1, 1);
 
 	public static Point2 WindowResolution => NativeResolution * WindowScale;
 
