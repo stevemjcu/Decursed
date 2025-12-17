@@ -8,7 +8,7 @@ internal static class Config
 	public const string Title = "Decursed";
 	public const string ContentPath = @".\Content";
 
-	public static bool DebugMode = false;
+	public static bool DebugMode = true;
 
 	public readonly static string LevelPath = Path.Combine(ContentPath, "Level");
 	public readonly static string TexturePath = Path.Combine(ContentPath, "Texture");
@@ -38,9 +38,6 @@ internal static class Config
 	public readonly static Vector2 MinVelocity = new(-TerminalSpeed);
 	public readonly static Vector2 MaxVelocity = new(+TerminalSpeed);
 	public readonly static Vector2 HoldOffset = new(0, -0.2f);
-
-	public readonly static Point2 Left = new(-1, 1);
-	public readonly static Point2 Right = new(1, 1);
 
 	public static Point2 WindowResolution => NativeResolution * WindowScale;
 

@@ -7,7 +7,7 @@ namespace Decursed;
 
 internal class Render(World World, Graphics Graphics) : System(World)
 {
-	private static Filter Drawable = new Filter().Include<Sprite, Position, Active>();
+	private static Filter Visible = new Filter().Include<Sprite, Position, Active>();
 
 	public override void Update(Time time)
 	{
@@ -27,7 +27,7 @@ internal class Render(World World, Graphics Graphics) : System(World)
 			}
 		}
 
-		foreach (var it in World.View(Drawable))
+		foreach (var it in World.View(Visible))
 		{
 			var sprite = it.Get<Sprite>().Value;
 			var position = it.Get<Position>().Value;

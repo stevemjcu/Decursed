@@ -6,7 +6,7 @@ namespace Decursed;
 
 internal class Stacking(World world) : System(world)
 {
-	private static Filter Actors = new Filter()
+	private static Filter Bodies = new Filter()
 		.Include<Position, Velocity, Falling, Hitbox, Active>();
 
 	private static Filter Platforms = new Filter()
@@ -18,9 +18,8 @@ internal class Stacking(World world) : System(world)
 		for (var i = 0; repeat && i < 10; i++)
 		{
 			repeat = false;
-			foreach (var b in World.View(Actors))
+			foreach (var b in World.View(Bodies))
 			{
-				// TODO: Sort by Y coordinate?
 				foreach (var a in World.View(Platforms))
 				{
 					// No collision if actor is this platform
@@ -48,7 +47,7 @@ internal class Stacking(World world) : System(world)
 					b.Remove<Falling>();
 					b.Set<Grounded>();
 
-					// If collision occurred, another may after projection.
+					// Since collision occurred, another may after pushout.
 					repeat = true;
 				}
 			}

@@ -32,13 +32,9 @@ internal class Input(World World, Controls Controls) : System(World)
 		var velocity = Player.Get<Velocity>().Value;
 		velocity.X = Controls.Move.Value.X * Config.MoveSpeed;
 
-		if (Controls.Move.PressedLeft)
+		if (Controls.Move.PressedLeft || Controls.Move.PressedRight)
 		{
-			Player.Set<Orientation>(new(Config.Left));
-		}
-		else if (Controls.Move.PressedRight)
-		{
-			Player.Set<Orientation>(new(Config.Right));
+			Player.Set<Orientation>(new(Controls.Move.IntValue with { Y = 1 }));
 		}
 
 		if (Controls.Jump.Pressed && Player.Has<Grounded>())
