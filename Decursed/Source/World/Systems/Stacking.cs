@@ -30,27 +30,27 @@ internal class Stacking(World world) : System(world)
 						continue;
 					}
 
-					var position0 = b.Get<Position>().Value;
-					var position1 = a.Get<Position>().Value;
+					var position0 = a.Get<Position>().Value;
+					var position1 = b.Get<Position>().Value;
 
-					var rect0 = b.Get<Hitbox>().Value.Translate(position0);
-					var rect1 = a.Get<Hitbox>().Value.Translate(position1);
+					var rect0 = a.Get<Hitbox>().Value.Translate(position0);
+					var rect1 = b.Get<Hitbox>().Value.Translate(position1);
 
 					// No collision if actor is not overlapping or pushout is not upwards.
-					if (!rect0.Overlaps(rect1, out var pushout) || pushout.Y >= 0)
+					if (!rect1.Overlaps(rect0, out var pushout) || pushout.Y >= 0)
 					{
 						continue;
 					}
 
-					var prevPosition = position0 - b.Get<Velocity>().Value * time.Delta;
+					var prevPosition = position1 - b.Get<Velocity>().Value * time.Delta;
 					var prevRect = b.Get<Hitbox>().Value.Translate(prevPosition);
 
-					if (prevRect.Overlaps(rect1))
+					if (prevRect.Overlaps(rect0))
 					{
 						continue;
 					}
 
-					b.Set<Position>(new(position0 + pushout));
+					b.Set<Position>(new(position1 + pushout));
 
 					var velocity = b.Get<Velocity>().Value;
 					b.Set<Velocity>(new(velocity with { Y = 0 }));
