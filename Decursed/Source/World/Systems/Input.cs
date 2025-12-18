@@ -1,4 +1,5 @@
 ﻿using Foster.Framework;
+using System.Numerics;
 using YetAnotherEcs;
 using static Decursed.Components;
 
@@ -13,20 +14,7 @@ internal class Input(World World, Controls Controls) : System(World)
 	public override void Update(Time time)
 	{
 		var view = World.View<HeldBy>(new(Player));
-
-		if (Controls.Interact.Pressed)
-		{
-			if (view.Count > 0 && view[0] is var item)
-			{
-				item.Remove<HeldBy>();
-				item.Set(Player.Get<Velocity>());
-			}
-			else if (Player.Has<Grounded>() && TryGetOverlappingItem(Player, out item))
-			{
-				item.Set<HeldBy>(new(Player));
-				item.Remove<Velocity>();
-			}
-		}
+		var item = view.Count > 0 ? view[0] : default;
 
 		var velocity = Player.Get<Velocity>().Value;
 		velocity.X = Controls.Move.Value.X * Config.MoveSpeed;
@@ -38,7 +26,7 @@ internal class Input(World World, Controls Controls) : System(World)
 
 		if (Controls.Jump.Pressed && Player.Has<Grounded>())
 		{
-			JumpFrame = view.Count == 0 ? Config.JumpFrames : Config.ReducedJumpFrames;
+			JumpFrame = item == default ? Config.JumpFrames : Config.ReducedJumpFrames;
 		}
 
 		if (JumpFrame-- > 0)
@@ -47,6 +35,30 @@ internal class Input(World World, Controls Controls) : System(World)
 		}
 
 		Player.Set<Velocity>(new(velocity));
+
+		if (Controls.Interact.Pressed)
+		{
+			if (item != default)
+			{
+				item.Remove<HeldBy>();
+
+				if (Controls.Move.IntValue.OnlyX() != Vector2.Zero)
+				{
+					var direction = Player.Get<Orientation>().Value.OnlyX();
+					item.Set<Velocity>(new(direction * Config.ThrowSpeed));
+					item.Remove<Gravity>();
+				}
+				else
+				{
+					item.Set(Player.Get<Velocity>());
+				}
+			}
+			else if (Player.Has<Grounded>() && TryGetOverlappingItem(Player, out item))
+			{
+				item.Set<HeldBy>(new(Player));
+				item.Remove<Velocity>();
+			}
+		}
 	}
 
 	private bool TryGetOverlappingItem(Entity a, out Entity b)

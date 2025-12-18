@@ -8,7 +8,7 @@ internal static class Config
 	public const string Title = "Decursed";
 	public const string ContentPath = @".\Content";
 
-	public static bool DebugMode = true;
+	public static bool DebugMode = false;
 
 	public readonly static string LevelPath = Path.Combine(ContentPath, "Level");
 	public readonly static string TexturePath = Path.Combine(ContentPath, "Texture");
@@ -28,7 +28,7 @@ internal static class Config
 	public const float JumpSpeed = 22;
 	public const int JumpFrames = 4;
 	public const int ReducedJumpFrames = 1;
-	public const float ThrowSpeed = 12;
+	public const float ThrowSpeed = 16;
 	public const float Gravity = 160;
 
 	// FIXME: Higher speeds cause tunneling
@@ -38,6 +38,7 @@ internal static class Config
 	public readonly static Vector2 MinVelocity = new(-TerminalSpeed);
 	public readonly static Vector2 MaxVelocity = new(+TerminalSpeed);
 	public readonly static Vector2 HoldOffset = new(0, -0.2f);
+	public readonly static Vector2 ThrowRecoil = new(-0.25f, 1);
 
 	public static Point2 WindowResolution => NativeResolution * WindowScale;
 

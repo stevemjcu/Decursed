@@ -30,6 +30,10 @@ internal class Motion(World world) : System(world)
 					it.Set<Falling>();
 				}
 			}
+			else
+			{
+				it.Remove<Grounded>();
+			}
 
 			velocity = velocity.Clamp(Config.MinVelocity, Config.MaxVelocity);
 			position += velocity * time.Delta;
