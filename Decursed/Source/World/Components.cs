@@ -27,6 +27,9 @@ internal static class Components
 	// Can move.
 	public record struct Velocity(Vector2 Value);
 
+	// Can collide.
+	public record struct Hitbox(Rect Value);
+
 	// Can fall.
 	public record struct Gravity();
 
@@ -35,9 +38,6 @@ internal static class Components
 
 	// Is falling.
 	public record struct Falling();
-
-	// Can collide.
-	public record struct Hitbox(Rect Value);
 
 	// Can receive input.
 	public record struct Receiver();

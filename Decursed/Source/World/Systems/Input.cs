@@ -25,7 +25,6 @@ internal class Input(World World, Controls Controls) : System(World)
 			{
 				item.Set<HeldBy>(new(Player));
 				item.Remove<Velocity>();
-				item.Remove<Grounded>();
 			}
 		}
 

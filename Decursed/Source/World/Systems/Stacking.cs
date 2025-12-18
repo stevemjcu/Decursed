@@ -7,10 +7,12 @@ namespace Decursed;
 internal class Stacking(World world) : System(world)
 {
 	private static Filter Bodies = new Filter()
-		.Include<Position, Velocity, Falling, Hitbox, Active>();
+		.Include<Position, Velocity, Falling, Hitbox, Active>()
+		.Exclude<HeldBy>();
 
 	private static Filter Platforms = new Filter()
-		.Include<Position, Platform, Grounded, Hitbox, Active>();
+		.Include<Position, Platform, Grounded, Hitbox, Active>()
+		.Exclude<HeldBy>();
 
 	public override void Update(Time _)
 	{

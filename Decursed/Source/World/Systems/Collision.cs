@@ -6,7 +6,9 @@ namespace Decursed;
 
 internal class Collision(World world) : System(world)
 {
-	private static Filter Bodies = new Filter().Include<Position, Hitbox, Active>();
+	private static Filter Bodies = new Filter()
+		.Include<Position, Hitbox, Active>()
+		.Exclude<HeldBy>();
 
 	public override void Update(Time _)
 	{
