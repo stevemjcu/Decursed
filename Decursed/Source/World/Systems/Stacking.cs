@@ -14,18 +14,18 @@ internal class Stacking(World world) : System(world)
 		.Include<Position, Platform, Grounded, Hitbox, Active>()
 		.Exclude<HeldBy>();
 
-	public override void Update(Time _)
+	public override void Update(Time time)
 	{
 		var repeat = true;
 		for (var i = 0; repeat && i < 10; i++)
 		{
 			repeat = false;
-			foreach (var b in World.View(Bodies))
+			foreach (var a in World.View(Platforms))
 			{
-				foreach (var a in World.View(Platforms))
+				foreach (var b in World.View(Bodies))
 				{
 					// No collision if actor is this platform
-					if (b == a)
+					if (a == b)
 					{
 						continue;
 					}
@@ -38,6 +38,14 @@ internal class Stacking(World world) : System(world)
 
 					// No collision if actor is not overlapping or pushout is not upwards.
 					if (!rect0.Overlaps(rect1, out var pushout) || pushout.Y >= 0)
+					{
+						continue;
+					}
+
+					var prevPosition = position0 - b.Get<Velocity>().Value * time.Delta;
+					var prevRect = b.Get<Hitbox>().Value.Translate(prevPosition);
+
+					if (prevRect.Overlaps(rect1))
 					{
 						continue;
 					}

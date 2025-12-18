@@ -25,7 +25,7 @@ internal static class Config
 	public readonly static Rect ThinBox = new(0.125f, 0.125f, 0.75f, 0.875f);
 
 	public const float MoveSpeed = 7;
-	public const float JumpSpeed = 20.5f;
+	public const float JumpSpeed = 22;
 	public const int JumpFrames = 4;
 	public const int ReducedJumpFrames = 1;
 	public const float ThrowSpeed = 12;
