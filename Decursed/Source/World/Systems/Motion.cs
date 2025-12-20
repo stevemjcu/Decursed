@@ -6,11 +6,9 @@ namespace Decursed;
 
 internal class Motion(World world) : System(world)
 {
-	private static Filter Movable = new Filter().Include<Position, Velocity, Active>();
-
 	public override void Update(Time time)
 	{
-		foreach (var it in World.View(Movable))
+		foreach (var it in World.View(new Filter().Include<Position, Velocity, Active>()))
 		{
 			var position = it.Get<Position>().Value;
 			var velocity = it.Get<Velocity>().Value;

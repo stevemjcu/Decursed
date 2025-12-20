@@ -6,8 +6,6 @@ namespace Decursed;
 
 internal class Debug(World World, Graphics Graphics) : System(World)
 {
-	private static Filter Drawable = new Filter().Include<Position, Hitbox, Active>();
-
 	public override void Update(Time time)
 	{
 		if (!Config.DebugMode)
@@ -15,7 +13,7 @@ internal class Debug(World World, Graphics Graphics) : System(World)
 			return;
 		}
 
-		foreach (var it in World.View(Drawable))
+		foreach (var it in World.View(new Filter().Include<Position, Hitbox, Active>()))
 		{
 			var position = it.Get<Position>().Value;
 			var hitbox = it.Get<Hitbox>().Value;

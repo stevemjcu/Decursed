@@ -8,7 +8,7 @@ internal static class Config
 	public const string Title = "Decursed";
 	public const string ContentPath = @".\Content";
 
-	public static bool DebugMode = false;
+	public static bool DebugMode = true;
 
 	public readonly static string LevelPath = Path.Combine(ContentPath, "Level");
 	public readonly static string TexturePath = Path.Combine(ContentPath, "Texture");

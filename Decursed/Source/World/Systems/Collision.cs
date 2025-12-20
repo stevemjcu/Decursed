@@ -6,13 +6,9 @@ namespace Decursed;
 
 internal class Collision(World world) : System(world)
 {
-	private static Filter Bodies = new Filter()
-		.Include<Position, Hitbox, Active>()
-		.Exclude<HeldBy>();
-
 	public override void Update(Time _)
 	{
-		foreach (var it in World.View(Bodies))
+		foreach (var it in World.View(new Filter().Include<Position, Hitbox, Active>()))
 		{
 			foreach (var dir in Config.Directions)
 			{

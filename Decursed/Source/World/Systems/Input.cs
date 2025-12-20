@@ -7,8 +7,6 @@ namespace Decursed;
 
 internal class Input(World World, Controls Controls) : System(World)
 {
-	private static Filter Items = new Filter().Include<Position, Hitbox, Portable, Active>();
-
 	private int JumpFrame = 0;
 
 	public override void Update(Time time)
@@ -46,17 +44,20 @@ internal class Input(World World, Controls Controls) : System(World)
 				{
 					var direction = Player.Get<Orientation>().Value.OnlyX();
 					item.Set<Velocity>(new(direction * Config.ThrowSpeed));
-					item.Remove<Gravity>();
 				}
 				else
 				{
 					item.Set(Player.Get<Velocity>());
+					item.Set<Gravity>();
 				}
 			}
 			else if (Player.Has<Grounded>() && TryGetOverlappingItem(Player, out item))
 			{
 				item.Set<HeldBy>(new(Player));
+
 				item.Remove<Velocity>();
+				item.Remove<Gravity>();
+				item.Remove<Grounded>();
 			}
 		}
 	}
@@ -82,7 +83,8 @@ internal class Input(World World, Controls Controls) : System(World)
 		var position = a.Get<Position>().Value;
 		var best = (Entity: (Entity?)null, Distance: float.MaxValue);
 
-		foreach (var it in World.View(Items))
+		foreach (var it in World.View(
+			new Filter().Include<Position, Hitbox, Portable, Active>()))
 		{
 			if (a == it)
 			{

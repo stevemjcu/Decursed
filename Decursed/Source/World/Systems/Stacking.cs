@@ -6,23 +6,17 @@ namespace Decursed;
 
 internal class Stacking(World world) : System(world)
 {
-	private static Filter Bodies = new Filter()
-		.Include<Position, Velocity, Falling, Hitbox, Active>()
-		.Exclude<HeldBy>();
-
-	private static Filter Platforms = new Filter()
-		.Include<Position, Platform, Grounded, Hitbox, Active>()
-		.Exclude<HeldBy>();
-
 	public override void Update(Time time)
 	{
 		var repeat = true;
 		for (var i = 0; repeat && i < 10; i++)
 		{
 			repeat = false;
-			foreach (var a in World.View(Platforms))
+			foreach (var a in World.View(
+				new Filter().Include<Position, Hitbox, Platform, Grounded, Active>()))
 			{
-				foreach (var b in World.View(Bodies))
+				foreach (var b in World.View(
+					new Filter().Include<Position, Hitbox, Velocity, Falling, Active>()))
 				{
 					// No collision if actor is this platform
 					if (a == b)
