@@ -39,7 +39,8 @@ internal class Stacking(World world) : System(world)
 					var prevPosition = position1 - b.Get<Velocity>().Value * time.Delta;
 					var prevRect = b.Get<Hitbox>().Value.Translate(prevPosition);
 
-					if (prevRect.Overlaps(rect0))
+					// No collision if actor was already colliding with platform.
+					if (prevRect.Overlaps(rect0, out var margin) && margin.Length() > 0.05)
 					{
 						continue;
 					}

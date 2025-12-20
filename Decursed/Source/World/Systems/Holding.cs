@@ -6,7 +6,7 @@ namespace Decursed;
 
 internal class Holding(World world) : System(world)
 {
-	public override void Update(Time time)
+	public override void Update(Time _)
 	{
 		foreach (var it in World.View(new Filter().Include<Position, HeldBy, Active>()))
 		{
