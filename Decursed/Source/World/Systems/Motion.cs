@@ -15,7 +15,7 @@ internal class Motion(World world) : System(world)
 
 			if (it.Has<Grounded>() && it != Player)
 			{
-				velocity.X *= 0.75f;
+				velocity.X *= Config.Friction;
 			}
 
 			if (it.Has<Gravity>())

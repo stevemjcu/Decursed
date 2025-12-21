@@ -30,6 +30,7 @@ internal static class Config
 	public const int ReducedJumpFrames = 1;
 	public const float ThrowSpeed = 16;
 	public const float Gravity = 160;
+	public const float Friction = 0.7f;
 
 	// FIXME: Higher speeds cause tunneling
 	// 30 tiles/sec = 0.5 tiles/frame

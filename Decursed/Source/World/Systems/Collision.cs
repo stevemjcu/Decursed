@@ -54,9 +54,10 @@ internal class Collision(World world) : System(world)
 						it.Set<Grounded>();
 					}
 
-					if (pushout.X != 0 && !it.Has<Gravity>())
+					if (pushout.X != 0 && it.Has<Thrown>())
 					{
 						it.Set<Velocity>(new(velocity * Config.ThrowRecoil));
+						it.Remove<Thrown>();
 						it.Set<Gravity>();
 					}
 				}

@@ -44,6 +44,7 @@ internal class Input(World World, Controls Controls) : System(World)
 				{
 					var direction = Player.Get<Orientation>().Value.OnlyX();
 					item.Set<Velocity>(new(direction * Config.ThrowSpeed));
+					item.Set<Thrown>();
 				}
 				else
 				{

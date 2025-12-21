@@ -39,6 +39,9 @@ internal static class Components
 	// Is falling.
 	public record struct Falling();
 
+	// Is thrown.
+	public record struct Thrown();
+
 	// Can receive input.
 	public record struct Receiver();
 
