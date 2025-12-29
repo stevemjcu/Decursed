@@ -40,13 +40,11 @@ internal class Collision(World world) : System(world) {
 
 					if (pushout.Y < 0 && velocity.Y > 0) {
 						it.Set<Velocity>(new(velocity.ZeroY()));
-						it.Remove<Falling>();
 						it.Set<Grounded>();
 					}
 
-					if (pushout.X != 0 && it.Has<Thrown>()) {
+					if (pushout.X != 0 && !it.Has<Gravity>()) {
 						it.Set<Velocity>(new(velocity * Config.ThrowRecoil));
-						it.Remove<Thrown>();
 						it.Set<Gravity>();
 					}
 				}

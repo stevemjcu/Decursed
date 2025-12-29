@@ -10,9 +10,14 @@ internal class Stacking(World world) : System(world) {
 		for (var i = 0; repeat && i < 10; i++) {
 			repeat = false;
 			foreach (var a in World.View(new Filter().Include<Position, Hitbox, Platform, Grounded, Focused>())) {
-				foreach (var b in World.View(new Filter().Include<Position, Hitbox, Velocity, Falling, Focused>())) {
+				foreach (var b in World.View(new Filter().Include<Position, Hitbox, Velocity, Focused>())) {
 					// No collision if actor is this platform
 					if (a == b) {
+						continue;
+					}
+
+					var velocity = b.Get<Velocity>().Value;
+					if (velocity.Y <= 0) {
 						continue;
 					}
 
@@ -36,10 +41,7 @@ internal class Stacking(World world) : System(world) {
 					}
 
 					b.Set<Position>(new(position1 + pushout));
-
-					var velocity = b.Get<Velocity>().Value;
 					b.Set<Velocity>(new(velocity with { Y = 0 }));
-					b.Remove<Falling>();
 					b.Set<Grounded>();
 
 					// Since collision occurred, another may after pushout.

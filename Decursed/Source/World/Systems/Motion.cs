@@ -6,8 +6,7 @@ namespace Decursed;
 
 internal class Motion(World world) : System(world) {
 	public override void Update(Time time) {
-		foreach (var it in World.View(
-			new Filter().Include<Position, Velocity, Focused>())) {
+		foreach (var it in World.View(new Filter().Include<Position, Velocity, Focused>())) {
 			var position = it.Get<Position>().Value;
 			var velocity = it.Get<Velocity>().Value;
 
@@ -18,10 +17,6 @@ internal class Motion(World world) : System(world) {
 			if (it.Has<Gravity>()) {
 				velocity.Y += Config.Gravity * time.Delta;
 				it.Remove<Grounded>();
-
-				if (velocity.Y > 0) {
-					it.Set<Falling>();
-				}
 			}
 			else {
 				it.Remove<Grounded>();
