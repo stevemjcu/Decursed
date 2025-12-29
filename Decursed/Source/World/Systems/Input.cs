@@ -89,7 +89,7 @@ internal class Input(World World, Controls Controls) : System(World)
 	private bool TryGetClosestItem(Entity a, out Entity b)
 	{
 		var position = a.Get<Position>().Value;
-		var best = (Entity: (Entity?)null, Distance: float.MaxValue);
+		var best = (Entity: (Entity)default, Distance: float.MaxValue);
 
 		foreach (var it in World.View(
 			new Filter().Include<Position, Hitbox, Portable, Focused>()))
@@ -108,7 +108,6 @@ internal class Input(World World, Controls Controls) : System(World)
 			}
 		}
 
-		b = best.Entity ?? default;
-		return best.Entity is not null;
+		return (b = best.Entity) != default;
 	}
 }
