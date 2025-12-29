@@ -11,9 +11,12 @@ internal class Input(World World, Controls Controls) : System(World)
 
 	public override void Update(Time time)
 	{
-		var view = World.View<HeldBy>(new(Player));
-		var item = view.Count > 0 ? view[0] : default;
+		HandleMovement();
+		HandleInteraction();
+	}
 
+	private void HandleMovement()
+	{
 		var velocity = Player.Get<Velocity>().Value;
 		velocity.X = Controls.Move.Value.X * Config.MoveSpeed;
 
@@ -24,7 +27,8 @@ internal class Input(World World, Controls Controls) : System(World)
 
 		if (Controls.Jump.Pressed && Player.Has<Grounded>())
 		{
-			JumpFrame = item == default ? Config.JumpFrames : Config.ReducedJumpFrames;
+			var weighted = World.View<HeldBy>(new(Player)).Any();
+			JumpFrame = weighted ? Config.ReducedJumpFrames : Config.JumpFrames;
 		}
 
 		if (JumpFrame-- > 0)
@@ -33,37 +37,40 @@ internal class Input(World World, Controls Controls) : System(World)
 		}
 
 		Player.Set<Velocity>(new(velocity));
+	}
 
-		if (Controls.Interact.Pressed)
+	private void HandleInteraction()
+	{
+		if (!Controls.Interact.Pressed)
 		{
-			if (item != default)
-			{
-				item.Remove<HeldBy>();
+			return;
+		}
 
-				if (Controls.Move.IntValue.OnlyX() != Vector2.Zero)
-				{
-					var direction = Player.Get<Orientation>().Value.OnlyX();
-					item.Set<Velocity>(new(direction * Config.ThrowSpeed));
-					item.Set<Thrown>();
-				}
-				else
-				{
-					item.Set(Player.Get<Velocity>());
-					item.Set<Gravity>();
-				}
-			}
-			else if (Player.Has<Grounded>() && TryGetOverlappingItem(Player, out item))
-			{
-				item.Set<HeldBy>(new(Player));
+		if (World.View<HeldBy>(new(Player)) is var view && view.Any())
+		{
+			var item = view.Single();
+			item.Remove<HeldBy>();
 
-				item.Remove<Velocity>();
-				item.Remove<Gravity>();
-				item.Remove<Grounded>();
+			if (Controls.Move.IntValue.OnlyX() != Vector2.Zero)
+			{
+				var direction = Player.Get<Orientation>().Value.OnlyX();
+				item.Set<Velocity>(new(direction * Config.ThrowSpeed));
+				item.Set<Thrown>();
 			}
+			else
+			{
+				item.Set(Player.Get<Velocity>());
+				item.Set<Gravity>();
+			}
+		}
+		else if (Player.Has<Grounded>() && TryGrabItem(Player, out var item))
+		{
+			item.Set<HeldBy>(new(Player));
+			item.Remove<Gravity>();
 		}
 	}
 
-	private bool TryGetOverlappingItem(Entity a, out Entity b)
+	private bool TryGrabItem(Entity a, out Entity b)
 	{
 		if (!TryGetClosestItem(a, out b))
 		{
