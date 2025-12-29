@@ -4,8 +4,7 @@ using YetAnotherEcs;
 
 namespace Decursed;
 
-internal static class Components
-{
+internal static class Components {
 	// Can be looked up.
 	[Indexed] public record struct Tag(char Value);
 

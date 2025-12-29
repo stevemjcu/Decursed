@@ -3,8 +3,7 @@ using System.Numerics;
 
 namespace Decursed;
 
-internal static class Config
-{
+internal static class Config {
 	public const string Title = "Decursed";
 	public const string ContentPath = @".\Content";
 
@@ -47,8 +46,7 @@ internal static class Config
 
 	public enum Spritesheet { Actors, Tiles };
 
-	public enum Actors
-	{
+	public enum Actors {
 		Unknown,
 		Cursor,
 		ChestOpen,
