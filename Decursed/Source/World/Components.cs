@@ -58,7 +58,7 @@ internal static class Components
 	public record struct Goal();
 
 	// Can be operated on.
-	public record struct Active();
+	public record struct Focused();
 
 	// Is an entrance to a template.
 	[Indexed] public record struct EntranceTo(Entity Value);

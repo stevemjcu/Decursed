@@ -25,7 +25,7 @@ internal class Render(World World, Graphics Graphics) : System(World)
 			}
 		}
 
-		foreach (var it in World.View(new Filter().Include<Sprite, Position, Active>()))
+		foreach (var it in World.View(new Filter().Include<Sprite, Position, Focused>()))
 		{
 			var sprite = it.Get<Sprite>().Value;
 			var position = it.Get<Position>().Value;

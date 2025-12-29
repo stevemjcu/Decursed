@@ -8,7 +8,7 @@ internal class Collision(World world) : System(world)
 {
 	public override void Update(Time _)
 	{
-		foreach (var it in World.View(new Filter().Include<Position, Hitbox, Active>()))
+		foreach (var it in World.View(new Filter().Include<Position, Hitbox, Focused>()))
 		{
 			foreach (var dir in Config.Directions)
 			{

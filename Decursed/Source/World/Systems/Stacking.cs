@@ -13,10 +13,10 @@ internal class Stacking(World world) : System(world)
 		{
 			repeat = false;
 			foreach (var a in World.View(
-				new Filter().Include<Position, Hitbox, Platform, Grounded, Active>()))
+				new Filter().Include<Position, Hitbox, Platform, Grounded, Focused>()))
 			{
 				foreach (var b in World.View(
-					new Filter().Include<Position, Hitbox, Velocity, Falling, Active>()))
+					new Filter().Include<Position, Hitbox, Velocity, Falling, Focused>()))
 				{
 					// No collision if actor is this platform
 					if (a == b)

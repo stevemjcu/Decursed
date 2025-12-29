@@ -13,7 +13,7 @@ internal class Debug(World World, Graphics Graphics) : System(World)
 			return;
 		}
 
-		foreach (var it in World.View(new Filter().Include<Position, Hitbox, Active>()))
+		foreach (var it in World.View(new Filter().Include<Position, Hitbox, Focused>()))
 		{
 			var position = it.Get<Position>().Value;
 			var hitbox = it.Get<Hitbox>().Value;

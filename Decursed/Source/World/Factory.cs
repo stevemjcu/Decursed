@@ -132,7 +132,7 @@ internal class Factory(World World)
 		entity.Set<Velocity>(new(Vector2.Zero));
 		entity.Set<Hitbox>(new(Config.StandardBox));
 		entity.Set<Gravity>();
-		entity.Set<Active>();
+		entity.Set<Focused>();
 		return entity;
 	}
 }

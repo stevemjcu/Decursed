@@ -8,7 +8,7 @@ internal class Motion(World world) : System(world)
 {
 	public override void Update(Time time)
 	{
-		foreach (var it in World.View(new Filter().Include<Position, Velocity, Active>()))
+		foreach (var it in World.View(new Filter().Include<Position, Velocity, Focused>()))
 		{
 			var position = it.Get<Position>().Value;
 			var velocity = it.Get<Velocity>().Value;

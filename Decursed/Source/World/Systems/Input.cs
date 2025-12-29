@@ -92,7 +92,7 @@ internal class Input(World World, Controls Controls) : System(World)
 		var best = (Entity: (Entity?)null, Distance: float.MaxValue);
 
 		foreach (var it in World.View(
-			new Filter().Include<Position, Hitbox, Portable, Active>()))
+			new Filter().Include<Position, Hitbox, Portable, Focused>()))
 		{
 			if (a == it)
 			{
