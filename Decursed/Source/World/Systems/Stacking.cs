@@ -4,20 +4,27 @@ using static Decursed.Components;
 
 namespace Decursed;
 
-internal class Stacking(World world) : System(world) {
-	public override void Update(Time time) {
+internal class Stacking(World world) : System(world)
+{
+	public override void Update(Time time)
+	{
 		var repeat = true;
-		for (var i = 0; repeat && i < 10; i++) {
+		for (var i = 0; repeat && i < 10; i++)
+		{
 			repeat = false;
-			foreach (var a in World.View(new Filter().Include<Position, Hitbox, Platform, Grounded, Focused>())) {
-				foreach (var b in World.View(new Filter().Include<Position, Hitbox, Velocity, Focused>())) {
+			foreach (var a in World.View(new Filter().Include<Position, Hitbox, Platform, Grounded, Focused>()))
+			{
+				foreach (var b in World.View(new Filter().Include<Position, Hitbox, Velocity, Focused>()))
+				{
 					// No collision if actor is this platform
-					if (a == b) {
+					if (a == b)
+					{
 						continue;
 					}
 
 					var velocity = b.Get<Velocity>().Value;
-					if (velocity.Y <= 0) {
+					if (velocity.Y <= 0)
+					{
 						continue;
 					}
 
@@ -28,7 +35,8 @@ internal class Stacking(World world) : System(world) {
 					var rect1 = b.Get<Hitbox>().Value.Translate(position1);
 
 					// No collision if actor is not overlapping or pushout is not upwards.
-					if (!rect1.Overlaps(rect0, out var pushout) || pushout.Y >= 0) {
+					if (!rect1.Overlaps(rect0, out var pushout) || pushout.Y >= 0)
+					{
 						continue;
 					}
 
@@ -36,7 +44,8 @@ internal class Stacking(World world) : System(world) {
 					var prevRect = b.Get<Hitbox>().Value.Translate(prevPosition);
 
 					// No collision if actor was already colliding with platform.
-					if (prevRect.Overlaps(rect0, out var margin) && margin.Length() > 0.05) {
+					if (prevRect.Overlaps(rect0, out var margin) && margin.Length() > 0.05)
+					{
 						continue;
 					}
 

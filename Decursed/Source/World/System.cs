@@ -4,7 +4,8 @@ using static Decursed.Components;
 
 namespace Decursed;
 
-internal abstract class System(World world) {
+internal abstract class System(World world)
+{
 	protected readonly World World = world;
 
 	protected Entity Player => World.View(new Filter().Include<Receiver>())[0];

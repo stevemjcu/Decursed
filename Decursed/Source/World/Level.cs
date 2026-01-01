@@ -3,7 +3,8 @@ using YetAnotherEcs;
 
 namespace Decursed;
 
-internal class Level : IScene {
+internal class Level : IScene
+{
 	private readonly World World = new();
 	private readonly Factory Factory;
 
@@ -11,7 +12,8 @@ internal class Level : IScene {
 	private readonly List<System> RenderSystems;
 	private readonly List<System> OverlaySystems;
 
-	public Level(string path, Game game) {
+	public Level(string path, Game game)
+	{
 		Factory = new(World);
 		Factory.LoadLevel(path);
 
@@ -26,20 +28,26 @@ internal class Level : IScene {
 		OverlaySystems = [new Debug(World, game.Graphics)];
 	}
 
-	public void Update(Time time) {
-		foreach (var it in UpdateSystems) {
+	public void Update(Time time)
+	{
+		foreach (var it in UpdateSystems)
+		{
 			it.Update(time);
 		}
 	}
 
-	public void RenderToBuffer(Time time) {
-		foreach (var it in RenderSystems) {
+	public void RenderToBuffer(Time time)
+	{
+		foreach (var it in RenderSystems)
+		{
 			it.Update(time);
 		}
 	}
 
-	public void RenderToScreen(Time time) {
-		foreach (var it in OverlaySystems) {
+	public void RenderToScreen(Time time)
+	{
+		foreach (var it in OverlaySystems)
+		{
 			it.Update(time);
 		}
 	}
